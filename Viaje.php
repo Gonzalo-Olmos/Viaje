@@ -2,23 +2,24 @@
 
 class Viaje{
 
-    //atributos
-    private $id;
+    //atributos de la clase
+    private $codigo;
     private $destino; 
     private $cantMaxPasajeros;
     private $coleccion_pasajeros=[];
 
+  
     //Constructor
-    public function __construct($id, $destino, $cantMaxPasajeros, $coleccion_pasajeros ){
-        $this->id = $id;
+    public function __construct($codigo, $destino, $cantMaxPasajeros, $coleccion_pasajeros ){
+        $this->codigo = $codigo;
         $this->destino = $destino;
         $this->cantMaxPasajeros = $cantMaxPasajeros;
         $this->coleccion_pasajeros = $coleccion_pasajeros;
     }
 
     //Getters
-    public function getId(){
-        return $this->id;
+    public function getCodigo(){
+        return $this->codigo;
     }
 
     public function getDestino(){
@@ -34,8 +35,8 @@ class Viaje{
     }
 
     //Setters
-    public function setId($id){
-        $this->id = $id;
+    public function setCodigo($codigo){
+        $this->id = $codigo;
     }
 
     public function setDestino($destino){
@@ -52,7 +53,7 @@ class Viaje{
 
     //toString
     public function __toString(){
-        return " \n id: ".$this->getId()."\n destino: ".$this->getDestino()."\n cantMaxPasajeros: ".$this->getCantMaxPasajeros()." \n coleccion_pasajeros: ".$this->getColeccion_pasajeros();
+        return " \n id: ".$this->getCodigo()."\n destino: ".$this->getDestino()."\n cantMaxPasajeros: ".$this->getCantMaxPasajeros()." \n coleccion_pasajeros: ".$this->getColeccion_pasajeros() ;
     }
 
     /** Esta función permite cargar los datos de un pasajero en un arreglo asociativo, retorna un arreglo cargado
@@ -61,12 +62,20 @@ class Viaje{
      * @param int $dni
      * @return array $pasajero
      */
-    public function cargar_datos_pasajero($nombre, $apellido, $dni ){
-        
-        $pasajero = ["nombre"<-$nombre,"apellido"<-$apellido,"dni"<-$dni ];
+    public static function cargar_datos_pasajero($nombre, $apellido, $dni ){
+        $pasajero = ["nombre"=>$nombre,"apellido"=>$apellido,"dni"=>$dni ];
 
         return $pasajero;
     }
+
+
+    
+ /*    public function cargar_pasajeros($pasajero){
+        for ($i=0; $i < $this->cantMaxPasajeros ; $i++) { 
+        $coleccion_pasajeros[$i]= $pasajero;
+        }
+    } */
+    
 
 
 
