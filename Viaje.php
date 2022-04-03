@@ -36,7 +36,7 @@ class Viaje{
 
     //Setters
     public function setCodigo($codigo){
-        $this->$codigo = $codigo;
+        $this->codigo = $codigo;
     }
 
     public function setDestino($destino){
@@ -53,7 +53,7 @@ class Viaje{
 
     //toString
     public function __toString(){
-        return " \n id: ".$this->getCodigo()."\n destino: ".$this->getDestino()."\n cantMaxPasajeros: ".$this->getCantMaxPasajeros()." \n coleccion_pasajeros: ".$this->getColeccion_pasajeros();
+        return " \n Codigo: ".$this->getCodigo()."\n destino: ".$this->getDestino()."\n cantMaxPasajeros: ".$this->getCantMaxPasajeros()." \n coleccion_pasajeros: ".$this->getColeccion_pasajeros();
     }
 
     /** Esta función permite cargar los datos de un pasajero en un arreglo asociativo, retorna un arreglo cargado

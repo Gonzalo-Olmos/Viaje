@@ -24,11 +24,11 @@ echo $objViaje;
     //Recorrido for para cargar el Arreglo Asosiativo de PASAJEROS Y Cargar La COLECCION DE PASAJEROS
     for($i=0; $i < $cantPasajeros; $i++) { 
         //pido los datos del pasajeros
-        echo ("Ingrese El nombre Ingrese El nombre del Pasajero: ".$i);
+        echo ("Ingrese El nombre Ingrese El nombre del Pasajero ".($i+1).": ");
         $nombrePasajero = trim(fgets(STDIN));
-        echo("Ingrese El Apellido del Pasajero: ".$i);
+        echo("Ingrese El Apellido del Pasajero ".($i+1).": ");
         $apellidoPasajero =  trim(fgets(STDIN));
-        echo("Ingrese El DNI del Pasajero: ".$i);
+        echo("Ingrese El DNI del Pasajero ".($i+1).": ");
         $dniPasajero =  trim(fgets(STDIN));
         //cargo los datos al arreglo
         $coleccion_pasajeros[$i] = Viaje::cargar_datos_pasajero($nombrePasajero, $apellidoPasajero, $dniPasajero);
