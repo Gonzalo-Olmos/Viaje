@@ -31,12 +31,12 @@ class Viaje{
     }
 
     public function getColeccion_pasajeros(){
-        return $this->coleccion_pasajeros;
+        return print_r($this->coleccion_pasajeros);
     }
 
     //Setters
     public function setCodigo($codigo){
-        $this->id = $codigo;
+        $this->$codigo = $codigo;
     }
 
     public function setDestino($destino){
@@ -53,7 +53,7 @@ class Viaje{
 
     //toString
     public function __toString(){
-        return " \n id: ".$this->getCodigo()."\n destino: ".$this->getDestino()."\n cantMaxPasajeros: ".$this->getCantMaxPasajeros()." \n coleccion_pasajeros: ".$this->getColeccion_pasajeros() ;
+        return " \n id: ".$this->getCodigo()."\n destino: ".$this->getDestino()."\n cantMaxPasajeros: ".$this->getCantMaxPasajeros()." \n coleccion_pasajeros: ".$this->getColeccion_pasajeros();
     }
 
     /** Esta función permite cargar los datos de un pasajero en un arreglo asociativo, retorna un arreglo cargado
@@ -68,6 +68,29 @@ class Viaje{
         return $pasajero;
     }
 
+
+    /**Esta funcion Modifica los datos de un Objeto Viaje. (incluyendo los datos del pasajero)
+ * @param Viaje $objViaje
+ * @param array $coleccion_pasajeros
+ */
+public function modificar_info_viaje($codigo, $destino, $cantMaxPasajeros, $posicion, $nombre, $apellido, $dni){
+    //Modifica los datos del viaje
+   
+    $this->setCodigo($codigo);
+   
+    $this->setDestino($destino);
+
+    $this->setCantMaxPasajeros( $cantMaxPasajeros);
+    
+    //Modifica datos del pasajero
+
+    $this->coleccion_pasajeros[$posicion-1]["nombre"] = $nombre ;
+ 
+    $this->coleccion_pasajeros[$posicion-1]["apellido"] = $apellido ;
+
+    $this->coleccion_pasajeros[$posicion-1]["dni"] = $dni ;
+
+}
 
     
  /*    public function cargar_pasajeros($pasajero){

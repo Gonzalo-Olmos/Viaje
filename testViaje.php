@@ -1,30 +1,28 @@
 <?php
 include_once("Viaje.php");
 
-/**
- * Menú
- * 1) Cargar información de un viaje 
- * 2) Modificar datos del viaje (incluyendo los datos del pasajero)
- * 3)Ver datos del viaje
- */
-
-
+//CARGA PREDETERMINADA
+$coleccion_pasajeros[0] = Viaje::cargar_datos_pasajero("Gonzalo", "Olmos", 41193872);
+$coleccion_pasajeros[1] = Viaje::cargar_datos_pasajero("Dario", "Olmos", 4115872);
+$objViaje = new Viaje(2323, "Vlla regina",  2, $coleccion_pasajeros);
+echo $objViaje;
+ 
 
  /**Esta funcion carga informacion de un viaje
   *@return Viaje viaje cargado
   */
-function carga_viaje(){
+ function carga_info_viaje(){
 
     //pido datos del viaje
-     echo("Ingrese el Codigo: \n");
+    echo("Ingrese el Codigo: \n");
     $codigo = trim(fgets(STDIN));
     echo("Ingrese Destino: \n");
     $destino = trim(fgets(STDIN));
     echo("Ingrese la cantidad máxima de pasajeros: \n");
-    $cantPasajeros = trim(fgets(STDIN));  
+    $cantPasajeros = trim(fgets(STDIN)); 
 
     //Recorrido for para cargar el Arreglo Asosiativo de PASAJEROS Y Cargar La COLECCION DE PASAJEROS
-    for ($i=0; $i < $cantPasajeros; $i++) { 
+    for($i=0; $i < $cantPasajeros; $i++) { 
         //pido los datos del pasajeros
         echo ("Ingrese El nombre Ingrese El nombre del Pasajero: ".$i);
         $nombrePasajero = trim(fgets(STDIN));
@@ -34,39 +32,107 @@ function carga_viaje(){
         $dniPasajero =  trim(fgets(STDIN));
         //cargo los datos al arreglo
         $coleccion_pasajeros[$i] = Viaje::cargar_datos_pasajero($nombrePasajero, $apellidoPasajero, $dniPasajero);
-}  
- 
-//creo una instancia Viaje 
-$objViaje = new Viaje($codigo, $destino,  $cantPasajeros, $coleccion_pasajeros);
- return $objViaje;
 }
 
-$objViaje = carga_viaje();
+        //creo una instancia Viaje 
+        $objetoViaje = new Viaje($codigo, $destino, $cantPasajeros, $coleccion_pasajeros);
+return $objetoViaje;
+}
+ 
 
-echo $objViaje;
+/**Funcion para modularizar la modificacion de datos
+ *@param Viaje $objViaje
+ */
+function modificar_datos($objViaje){
+//Pide los datos del viaje
+echo("Ingrese el Nuevo Codigo: \n");
+$codigo = trim(fgets(STDIN));
+echo("Ingrese el Nuevo Destino: \n");
+$destino = trim(fgets(STDIN));
+echo("Ingrese la nueva cantidad máxima de pasajeros  \n");
+$cantMaxPasajeros = trim(fgets(STDIN));
 
-$coleccion_pasajeros[0] = Viaje::cargar_datos_pasajero("Gonzalo", "Olmos", 41193872);
-$coleccion_pasajeros[1] = Viaje::cargar_datos_pasajero("Dario", "Olmos", 4115872);
-$objViaje = new Viaje(2323, "Vlla regina",  2, $coleccion_pasajeros);
+//Pide datos del pasajero
+echo("Ingrese el Nro de Pasajero que desea modificar: ");
+$posicion = trim(fgets(STDIN));
+echo("Ingrese el Nuevo Nombre: ");
+$nombre = trim(fgets(STDIN));
+echo("Ingrese el Nuevo Apellido: ");
+$apellido = trim(fgets(STDIN));
+echo("Ingrese el Nuevo Dni : ");
+$dni = trim(fgets(STDIN));
+
+$objViaje->modificar_info_viaje($codigo, $destino, $cantMaxPasajeros, $posicion, $nombre, $apellido, $dni);
+}
 
 
-echo $objViaje;
+//MENU DE OPCIONES
+do{
+    $opcion = seleccionarOpcion();
+
+    switch ($opcion) {
+        case '1':
+            //Cargar información de un viaje
+            $objViaje = carga_info_viaje();
+            break;
+        case '2':
+            //Modificar datos del viaje
+              modificar_datos($objViaje);
+            break;
+        case '3':
+                 //Ver datos del viaje  
+                 echo $objViaje;
+            break;
+        case '4':
+                //Salir
+ 			$opcion = 4;
+            break;
+        }
+}while( $opcion != 4);
 
 
 
+/** 
+* Esta funcion permite seleccionar una opcion del menu
+* @return int
+*/
+function seleccionarOpcion(){
+    //int $opcion
+    $opcion = 0;
+    echo" \n";
+    echo"Elija una opcion valida: \n";
+    echo" \n";
+    while($opcion != 4){
+ 	    echo"Menú de opciones \n";
+        echo"1)Cargar información de un viaje   \n";
+        echo"2)Modificar datos del viaje (incluyendo los datos del pasajero) \n";
+        echo"3)Ver datos del viaje \n";
+   	    echo"4) Salir \n";
+   	    
+   	    $opcion = solicitarNumeroEntre(1,4);
+	    if($opcion!= 4){
+            break;
+        }      
+    }
+    return $opcion;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * Solicita al usuario un número en el rango [$min,$max]
+ * @param int $min
+ * @param int $max
+ * @return int 
+ */
+function solicitarNumeroEntre($min, $max)
+{
+    //int $numero
+    $numero = trim(fgets(STDIN));
+    while (!is_int($numero) && !($numero >= $min && $numero <= $max)) {  //La primer negacion creemos que no es correcta
+        echo "Debe ingresar un número entre " . $min . " y " . $max . ": ";
+        $numero = trim(fgets(STDIN));
+    }
+    return $numero;
+}
 
 
 
