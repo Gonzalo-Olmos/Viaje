@@ -31,7 +31,7 @@ class Viaje{
     }
 
     public function getColeccion_pasajeros(){
-        return print_r($this->coleccion_pasajeros);
+        return $this->coleccion_pasajeros;
     }
 
     //Setters
@@ -53,9 +53,8 @@ class Viaje{
 
     //toString
     public function __toString(){
-        return " \n Codigo: ".$this->getCodigo()."\n destino: ".$this->getDestino()."\n cantMaxPasajeros: ".$this->getCantMaxPasajeros()." \n coleccion_pasajeros: ".$this->getColeccion_pasajeros();
-    }
-
+        return "\n Codigo: ".$this->getCodigo()." \n  destino: ".$this->getDestino()."\n cantMaxPasajeros: ".$this->getCantMaxPasajeros()." \n coleccion_pasajeros:  \n".$this->mostrar_coleccion_pasajero();
+    }       
     /** Esta función permite cargar los datos de un pasajero en un arreglo asociativo, retorna un arreglo cargado
      * @param String $nombre
      * @param String $apellido
@@ -64,7 +63,6 @@ class Viaje{
      */
     public static function cargar_datos_pasajero($nombre, $apellido, $dni ){
         $pasajero = ["nombre"=>$nombre,"apellido"=>$apellido,"dni"=>$dni ];
-
         return $pasajero;
     }
 
@@ -80,15 +78,32 @@ public function modificar_info_viaje($codigo, $destino, $cantMaxPasajeros, $posi
    
     $this->setDestino($destino);
 
-    $this->setCantMaxPasajeros( $cantMaxPasajeros);
+    $this->setCantMaxPasajeros($cantMaxPasajeros);
     
-    //Modifica datos del pasajero
-
+    if ($posicion != -1) {
+        //Modifica datos del pasajero
     $this->coleccion_pasajeros[$posicion-1]["nombre"] = $nombre ;
  
     $this->coleccion_pasajeros[$posicion-1]["apellido"] = $apellido ;
 
     $this->coleccion_pasajeros[$posicion-1]["dni"] = $dni ;
+    }
+    
+}
+
+/**Está funcion hace un recorrido al arreglo para mostrar la informacion del arreglo
+ */
+public function mostrar_coleccion_pasajero(){
+$coleccionPasajeros = [];
+$coleccionPasajeros = $this->getColeccion_pasajeros();
+
+for ($i=0; $i < count($coleccionPasajeros) ; $i++) { 
+    echo("--- Pasajero ".($i+1)." ---: \n");
+    echo "Nombre: ".$coleccionPasajeros[$i]["nombre"]." \n";
+    echo "Apellido: ".$coleccionPasajeros[$i]["apellido"]." \n";
+    echo "Dni: ".$coleccionPasajeros[$i]["dni"]." \n";
+}
+
 
 }
 

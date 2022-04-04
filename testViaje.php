@@ -44,25 +44,67 @@ return $objetoViaje;
  *@param Viaje $objViaje
  */
 function modificar_datos($objViaje){
+    //variable por si el usuario quiere modificar un pasajero
+    $posicion = -1;
+    //inicializo las variables en null por si el usuario no quiere modificar o agrear un pasajero
+    $nombre = null;
+    $apellido = null;       
+    $dni = null;
 //Pide los datos del viaje
 echo("Ingrese el Nuevo Codigo: \n");
 $codigo = trim(fgets(STDIN));
 echo("Ingrese el Nuevo Destino: \n");
 $destino = trim(fgets(STDIN));
-echo("Ingrese la nueva cantidad máxima de pasajeros  \n");
-$cantMaxPasajeros = trim(fgets(STDIN));
+/* echo("Ingrese la nueva cantidad máxima de pasajeros  \n");
+$cantMaxPasajeros = trim(fgets(STDIN)); */
 
+//Consulta si desa ingresar más pasajeros
+echo ("Desea ingresar más pasajeros? si/no:");
+$respuesta = trim(fgets(STDIN));
+if ($respuesta == "si"){
+    echo("Cuantos pasajeros más desea agregar? ");
+    $cantPasajerosNuevos = trim(fgets(STDIN));
+    $limite =  $objViaje->getCantMaxPasajeros()+$cantPasajerosNuevos;
+    //Agrega los nuevos pasajaros a la collecion de pasajeros
+    for ($i=($objViaje->getCantMaxPasajeros()+1); $i <= $limite; $i++) { 
+        echo("Pasajero Nuevo  \n");
+        echo("Ingrese el Nuevo Nombre:  \n");
+        $nombre = trim(fgets(STDIN));
+        echo("Ingrese el Nuevo Apellido:  \n");
+        $apellido = trim(fgets(STDIN));
+        echo("Ingrese el Nuevo Dni :  \n");
+        $dni = trim(fgets(STDIN));
+        
+        //obtengo la coleccion de pasajeros
+        $colPasajeros = $objViaje->getColeccion_pasajeros();
+
+        $colPasajeros[$i]["nombre"]= $nombre ;
+        $colPasajeros[$i]["apellido"]= $apellido;
+        $colPasajeros[$i]["dni"]= $dni;         
+        
+         print_r($colPasajeros);
+
+        echo(" ///Pasajero Guardado con Exito\\\ \n");
+        }
+
+}
+//pregunta si desea modificar los datos de un pasajero en especifico
+echo("Desea Modificar los datos de algun pasajero?: si/no");
+$respuesta = trim(fgets(STDIN));
+if ($respuesta == "si" ) {
+    echo("Ingrese el Nro de Pasajero que desea modificar: ");
+$posicion = trim(fgets(STDIN)); //acá podria hacer un metodo que verifique que exista la posición
 //Pide datos del pasajero
-echo("Ingrese el Nro de Pasajero que desea modificar: ");
-$posicion = trim(fgets(STDIN));
 echo("Ingrese el Nuevo Nombre: ");
 $nombre = trim(fgets(STDIN));
 echo("Ingrese el Nuevo Apellido: ");
 $apellido = trim(fgets(STDIN));
 echo("Ingrese el Nuevo Dni : ");
 $dni = trim(fgets(STDIN));
+}
+$objViaje->setCantMaxPasajeros($objViaje->getCantMaxPasajeros()+$cantPasajerosNuevos);
+$objViaje->modificar_info_viaje($codigo, $destino, $objViaje->getCantMaxPasajeros(), $posicion, $nombre, $apellido, $dni);
 
-$objViaje->modificar_info_viaje($codigo, $destino, $cantMaxPasajeros, $posicion, $nombre, $apellido, $dni);
 }
 
 
@@ -133,7 +175,6 @@ function solicitarNumeroEntre($min, $max)
     }
     return $numero;
 }
-
 
 
 ?>
