@@ -68,28 +68,18 @@ class Viaje{
 
 
     /**Esta funcion Modifica los datos de un Objeto Viaje. (incluyendo los datos del pasajero)
- * @param Viaje $objViaje
+ * @param Viaje $codigo
+ * @param $destino
  * @param array $coleccion_pasajeros
  */
-public function modificar_info_viaje($codigo, $destino, $cantMaxPasajeros, $posicion, $nombre, $apellido, $dni){
+/* public function modificar_info_viaje($coleccion_pasajeros){
     //Modifica los datos del viaje
    
-    $this->setCodigo($codigo);
-   
-    $this->setDestino($destino);
 
-    $this->setCantMaxPasajeros($cantMaxPasajeros);
-    
-    if ($posicion != -1) {
-        //Modifica datos del pasajero
-    $this->coleccion_pasajeros[$posicion-1]["nombre"] = $nombre ;
- 
-    $this->coleccion_pasajeros[$posicion-1]["apellido"] = $apellido ;
+    $this->setColeccion_pasajeros($coleccion_pasajeros);
 
-    $this->coleccion_pasajeros[$posicion-1]["dni"] = $dni ;
-    }
     
-}
+} */
 
 /**Está funcion hace un recorrido al arreglo para mostrar la informacion del arreglo
  */
@@ -97,13 +87,13 @@ public function mostrar_coleccion_pasajero(){
 $coleccionPasajeros = [];
 $coleccionPasajeros = $this->getColeccion_pasajeros();
 
-for ($i=0; $i < count($coleccionPasajeros) ; $i++) { 
+ for ($i=0; $i < count($coleccionPasajeros) ; $i++) { 
     echo("--- Pasajero ".($i+1)." ---: \n");
     echo "Nombre: ".$coleccionPasajeros[$i]["nombre"]." \n";
     echo "Apellido: ".$coleccionPasajeros[$i]["apellido"]." \n";
     echo "Dni: ".$coleccionPasajeros[$i]["dni"]." \n";
-}
-
+} 
+   
 
 }
 
