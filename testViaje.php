@@ -40,7 +40,7 @@ return $objetoViaje;
 }
  
 
-/**Funcion para modularizar la modificacion de datos
+/**Funcion que mofifica los datos del viaje y de los pasajeros
  *@param Viaje $objViaje
  */
 function modificar_datos($objViaje){
@@ -110,9 +110,7 @@ if ($respuesta == "si"){
         $colPasajeros[$posicion-1]["nombre"]= $nombre ;
         $colPasajeros[$posicion-1]["apellido"]= $apellido;
         $colPasajeros[$posicion-1]["dni"]= $dni;   
-
     }
-
 
 $objViaje->setCantMaxPasajeros($objViaje->getCantMaxPasajeros()+$cantPasajerosNuevos);
 $objViaje->setColeccion_pasajeros($colPasajeros);

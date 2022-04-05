@@ -8,7 +8,6 @@ class Viaje{
     private $cantMaxPasajeros;
     private $coleccion_pasajeros=[];
 
-  
     //Constructor
     public function __construct($codigo, $destino, $cantMaxPasajeros, $coleccion_pasajeros ){
         $this->codigo = $codigo;
@@ -67,20 +66,6 @@ class Viaje{
     }
 
 
-    /**Esta funcion Modifica los datos de un Objeto Viaje. (incluyendo los datos del pasajero)
- * @param Viaje $codigo
- * @param $destino
- * @param array $coleccion_pasajeros
- */
-/* public function modificar_info_viaje($coleccion_pasajeros){
-    //Modifica los datos del viaje
-   
-
-    $this->setColeccion_pasajeros($coleccion_pasajeros);
-
-    
-} */
-
 /**Está funcion hace un recorrido al arreglo para mostrar la informacion del arreglo
  */
 public function mostrar_coleccion_pasajero(){
@@ -96,15 +81,6 @@ $coleccionPasajeros = $this->getColeccion_pasajeros();
    
 
 }
-
-    
- /*    public function cargar_pasajeros($pasajero){
-        for ($i=0; $i < $this->cantMaxPasajeros ; $i++) { 
-        $coleccion_pasajeros[$i]= $pasajero;
-        }
-    } */
-    
-
 
 
 }
