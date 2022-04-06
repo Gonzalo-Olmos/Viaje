@@ -3,12 +3,13 @@ include_once("Viaje.php");
 
 //CARGA PREDETERMINADA
 $coleccion_pasajeros[0] = Viaje::cargar_datos_pasajero("Gonzalo", "Olmos", 41193872);
-$coleccion_pasajeros[1] = Viaje::cargar_datos_pasajero("Dario", "Olmos", 4115872);
-$objViaje = new Viaje(2323, "Vlla regina",  2, $coleccion_pasajeros);
+$coleccion_pasajeros[1] = Viaje::cargar_datos_pasajero("Braian", "Castaño", 4115872);
+$coleccion_pasajeros[2] = Viaje::cargar_datos_pasajero("Ricardo", "Mollo", 4115872);
+$objViaje = new Viaje(232323, "Vlla regina",  3, $coleccion_pasajeros);
 echo $objViaje;
  
 
- /**Esta funcion carga informacion de un viaje
+ /**Esta funcion carga informacion de un viaje Nuevo
   *@return Viaje viaje cargado
   */
  function carga_info_viaje(){
@@ -21,7 +22,7 @@ echo $objViaje;
     echo("Ingrese la cantidad máxima de pasajeros: \n");
     $cantPasajeros = trim(fgets(STDIN)); 
 
-    //Recorrido for para cargar el Arreglo Asosiativo de PASAJEROS Y Cargar La COLECCION DE PASAJEROS
+    //Recorrido for para cargar el Arreglo Asosiativo de PASAJEROS Y Cargar a La COLECCION DE PASAJEROS
     for($i=0; $i < $cantPasajeros; $i++) { 
         //pido los datos del pasajeros
         echo ("Ingrese El nombre Ingrese El nombre del Pasajero ".($i+1).": ");
@@ -44,11 +45,12 @@ return $objetoViaje;
  *@param Viaje $objViaje
  */
 function modificar_datos($objViaje){
- $cantPasajerosNuevos =0;
-//obtengo la coleccion de pasajeros
-$colPasajeros = $objViaje->getColeccion_pasajeros();
+    //int $cantPasajerosNuevos
+    $cantPasajerosNuevos =0;
+    //obtengo la coleccion de pasajeros
+    $colPasajeros = $objViaje->getColeccion_pasajeros();
 
-//Pide los datos del viaje
+//Pide los datos del viaje En caso de que se deseen modificar
 echo("Desea Modificar el Codigo del viaje? (si/no): ");
     $respuesta = trim(fgets(STDIN));
 if ($respuesta == "si") {
@@ -65,7 +67,6 @@ if ($respuesta == "si") {
 }
 
 //Consulta si desa ingresar más pasajeros
-
 echo ("Desea ingresar más pasajeros? (si/no): ");
 $respuesta = trim(fgets(STDIN));
 if ($respuesta == "si"){
@@ -73,7 +74,7 @@ if ($respuesta == "si"){
     $cantPasajerosNuevos = trim(fgets(STDIN));
     $limite =  $objViaje->getCantMaxPasajeros()+$cantPasajerosNuevos;
 
-    //Agrega los nuevos pasajaros a la collecion de pasajeros
+    //Agrega los nuevos pasajaros a la coleccion de pasajeros
     for ($i=$objViaje->getCantMaxPasajeros(); $i < $limite; $i++) { 
         echo("Pasajero Nuevo  \n");
         echo("Ingrese el Nuevo Nombre:  \n");
@@ -83,12 +84,10 @@ if ($respuesta == "si"){
         echo("Ingrese el Nuevo Dni :  \n");
         $dni = trim(fgets(STDIN));
         
-        
         //carga datos del pasajero nuevo
         $colPasajeros[$i]["nombre"]= $nombre ;
         $colPasajeros[$i]["apellido"]= $apellido;
         $colPasajeros[$i]["dni"]= $dni;  
-
 
         echo(" ///Pasajero Guardado con Exito\\\ \n");
         }
@@ -114,10 +113,8 @@ if ($respuesta == "si"){
 
 $objViaje->setCantMaxPasajeros($objViaje->getCantMaxPasajeros()+$cantPasajerosNuevos);
 $objViaje->setColeccion_pasajeros($colPasajeros);
-print_r($objViaje->getColeccion_pasajeros());
 
 }
-
 
 //MENU DE OPCIONES
 do{
@@ -142,7 +139,6 @@ do{
             break;
         }
 }while( $opcion != 4);
-
 
 
 /** 
