@@ -10,7 +10,7 @@ class Viaje
     private $coleccion_pasajeros = [];
     private $objResponsableViaje;
     private $importe;
-    private $idaYvuelta;
+    private $idaYvuelta; // si o no
 
     //Constructor
     public function __construct($codigo, $destino, $cantMaxPasajeros,  $objResponsableViaje, $importe, $idaYvuelta)
@@ -106,13 +106,13 @@ class Viaje
     /**
      * Funcion que setea Los datos de un Pasajero Especifico
      */
-    public function modifica_datos_pasajero($nombre, $apellido, $nuevoDni, $nroTelefono, $pos)
+    public function modifica_datos_pasajero($nombre, $apellido, $dni, $nroTelefono, $pos)
     {
         $coleccion_pasajeros = $this->getColeccion_pasajeros();
 
         $coleccion_pasajeros[$pos]->setNombre($nombre);
         $coleccion_pasajeros[$pos]->setApellido($apellido);
-        $coleccion_pasajeros[$pos]->setNroDni($nuevoDni);
+        $coleccion_pasajeros[$pos]->setNroDni($dni);
         $coleccion_pasajeros[$pos]->setTelefono($nroTelefono);
 
         $this->setColeccion_pasajeros($coleccion_pasajeros);
@@ -142,6 +142,14 @@ class Viaje
         return $posicion;
     }
 
+    /**
+     * Hacer una funcion para agregar un pasajero a la coleccion 
+     * @param Pasajero $unPasajero
+     */
+    public function agregarPasajero($unPasajero){ 
+        $coleccionPasajeros = $this->getColeccion_pasajeros();
+        $coleccionPasajeros[]= $unPasajero;
+    }
 
 
     /**Está funcion hace un recorrido al arreglo para mostrar la informacion del arreglo
@@ -159,4 +167,47 @@ class Viaje
         }
         return $cadena;
     }
+
+    /**
+     * Metodo que registra la venta de un viaje al pasajero que es recibido por parámetro.
+     * @param Pasajero $pasajero
+     * @return double 
+     */
+    public function venderPasaje($unPasajero){
+        
+        if($this->hayPasajesDisponibles()){
+            #Se realiza la venta del viaje
+            $this->agregarPasajero($unPasajero);
+
+            $importe = $this->getImporte();
+            if($this->getIdaYvuelta()=="si"){
+                #si es de ida y vuelta el importe se incrementa un %50
+                $importe += ($importe * 50)/100; 
+            }  
+             
+        }else{
+            $importe = null;
+        }
+        return $importe;
+    }
+    
+    /**
+     * Metodo que retorna verdadero si la cantidad de pasajeros del viaje es menor a la cantidad máxima de pasajeros y falso caso contrario.
+     *@return bool si hay pasajes disponibles
+     */
+    public function hayPasajesDisponibles(){
+
+        $res=false;
+        
+        $cantPasajeros = count($this->getColeccion_pasajeros());
+        
+        if($cantPasajeros < $this->getCantMaxPasajeros()){
+            $res=true;
+        }
+
+       return $res;
+    }
+
+  
+
 }

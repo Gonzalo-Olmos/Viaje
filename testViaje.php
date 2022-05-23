@@ -2,6 +2,8 @@
 include_once("Viaje.php");
 include_once("Pasajero.php");
 include_once("ResponsableV.php");
+include_once("Terrestres.php");
+include_once("Aereos.php");
 
  /**Esta funcion carga predeterminadamente informacion de un viaje Nuevo
   *@return Viaje viaje cargado
@@ -11,20 +13,31 @@ include_once("ResponsableV.php");
     $objResponsable = new ResponsableV(23, 1111, "Mario", "Crespo");
 
     //creo una instancia Viaje 
-    $objetoViaje = new Viaje(1123, "El bolson", 4, $objResponsable);
+    $objetoViaje = new Viaje(1123, "El bolson", 10, $objResponsable, 15000, "si");
 
     //creo 4 instancias de la clase Pasajero
     $objPasajero1= new Pasajero("Juliana", "Olmos", 49412345, 2984234554);
     $objPasajero2= new Pasajero("Graciela", "Fernzandez", 37412345, 2984675494);
     $objPasajero3= new Pasajero("Gonzalo", "Olmos", 41193872, 2984906132 );
     $objPasajero4= new Pasajero("Fernando", "Olmos", 37356341, 2984922170);
-    //agrego a una array los pasajeros
+    //agrego a un array los pasajeros
     $arrayPasajeros[0] =$objPasajero1;
     $arrayPasajeros[1] =$objPasajero2;
     $arrayPasajeros[2] =$objPasajero3;
     $arrayPasajeros[3] =$objPasajero4;
     //seteo el array a la coleccion de pasajeros de la clase Viaje
     $objetoViaje->setColeccion_pasajeros($arrayPasajeros);
+
+    //Venta de pasajes
+    echo "Venta de Pasaje Terrestre: \n";
+    $objViajeTerrestre = new Terrestres(67584, "Villa la angostura", 8,  $objResponsable,  50000, "si", "cama");
+    $importe = $objViajeTerrestre->venderPasaje($objPasajero1);
+    echo "Importe de venta: $".$importe;
+    echo " \n";
+    echo "Venta de Pasaje Aereo: \n";
+    $objViajeAereo= new Aereos(67584, "Villa la angostura", 8,  $objResponsable,  50000, "si", 998, "primera clase", "Aerolineas argentina", 4);
+    $importe = $objViajeAereo->venderPasaje($objPasajero2);
+    echo "Importe de venta: $".$importe;
 
 return $objetoViaje;
 }
@@ -156,6 +169,10 @@ function solicitarNumeroEntre($min, $max)
     }
     return $numero;
 }
+
+
+
+
 
 
 ?>
