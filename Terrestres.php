@@ -1,4 +1,5 @@
 <?php
+include_once("./BaseDeDatos/BaseDatos.php");
 
 class Terrestres extends Viaje
 {

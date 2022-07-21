@@ -140,7 +140,8 @@ function seleccionarOpcion(){
     echo" \n";
     while($opcion != 4){
  	    echo"Menú de opciones \n";
-        echo"1)Cargar información de un viaje \n";
+        /**Cargar una empresa */
+        echo"1)Cargar Viaje \n";
         echo"2)Modificar datos del viaje (incluyendo los datos del pasajero) \n";
         echo"3)Ver datos del viaje \n";
    	    echo"4) Salir \n";
@@ -163,7 +164,7 @@ function solicitarNumeroEntre($min, $max)
 {
     //int $numero
     $numero = trim(fgets(STDIN));
-    while (!is_int($numero) && !($numero >= $min && $numero <= $max)) {  //La primer negacion creemos que no es correcta
+    while (!is_int($numero) && !($numero >= $min && $numero <= $max)) { 
         echo "Debe ingresar un número entre " . $min . " y " . $max . ": ";
         $numero = trim(fgets(STDIN));
     }
