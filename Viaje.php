@@ -383,12 +383,13 @@ class Viaje
 					$destino=$row2['vdestino'];
 					$cantMaxPasajeros=$row2['vcantmaxpasajeros'];
 					$objEmpresa= $row2['idempresa'];
-                    $objResponsableViaje =  $row2['rnumeroempleado'];
-                    $importe =  $row2['vimporte'];
-                    $tipoAsiento =  $row2['tipoAsiento'];
-                    $idaYvuelta =  $row2['idayvuelta'];
+                    $objResponsableViaje = $this->getResponsableViaje()  /**$row2['rnumeroempleado']*/ ;
+                    $importe=  $row2['vimporte'];
+                    $tipoAsiento=  $row2['tipoAsiento'];
+                    $idaYvuelta=  $row2['idayvuelta'];
+
 					$viaje=new Viaje();
-					$viaje->cargar($codigo, $destino, $objEmpresa, $cantMaxPasajeros,  $objResponsableViaje, $importe, $tipoAsiento, $idaYvuelta);
+					$viaje->cargar($codigo, $destino, $objEmpresa, $cantMaxPasajeros, $objResponsableViaje, $importe, $tipoAsiento, $idaYvuelta);
 					array_push($arregloViaje,$viaje);              
 				}
 			
