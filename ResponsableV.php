@@ -151,18 +151,18 @@ public function __toString(){
 	 * @param int $dni
 	 * @return true en caso de encontrar los datos, false en caso contrario 
 	 */		
-    public function Buscar($nroEmpleado){
+    public function buscar($nroEmpleado){
 		$base=new BaseDatos();
-		$consultaPersona="Select * from responsable where rnumeroempleado=".$nroEmpleado;
-		$resp= false;
+		$consultaResponsable="Select * from responsable where rnumeroempleado=".$nroEmpleado;
+		$resp=false;
 		if($base->Iniciar()){
-			if($base->Ejecutar($consultaPersona)){
-				if($row2=$base->Registro()){	
+			if($base->Ejecutar($consultaResponsable)){
+				if($registro=$base->Registro()){	
                      /**rnumeroempleado, rnumerolicencia, rnombre, rapellido */				
 				    $this->setNroEmpleado($nroEmpleado);
-					$this->setNroLicencia($row2['rnumerolicencia']);
-					$this->getNombre($row2['rnombre']);
-					$this->setApellido($row2['rapellido']);
+					$this->setNroLicencia($registro['rnumerolicencia']);
+					$this->setNombre($registro['rnombre']);
+					$this->setApellido($registro['rapellido']);
 					$resp= true;
 				}				
 			
@@ -189,14 +189,12 @@ public function __toString(){
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaResponsable)){				
 				$arregloResponsable= array();
-				while($row2=$base->Registro()){
+				while($registro=$base->Registro()){
 					 /**rnumeroempleado, rnumerolicencia, rnombre, rapellido */		
-					$nroEmpleado=$row2['rnumeroempleado'];
-					$nroLicencia=$row2['rnumerolicencia'];
-					$nombre=$row2['rnombre'];
-					$apellido= $row2['rapellido'];
+					
 					$responsable=new ResponsableV();
-					$responsable->cargar($nroEmpleado, $nroLicencia, $nombre, $apellido);
+					$responsable->buscar($registro['rnumeroempleado']);
+
 					array_push($arregloResponsable,$responsable);              
 				}
 			

@@ -32,7 +32,7 @@ CREATE TABLE viaje (
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;
 	
 CREATE TABLE pasajero (
-    rdocumento varchar(15),
+    pdocumento varchar(15),
     pnombre varchar(150), 
     papellido varchar(150), 
 	ptelefono int, 

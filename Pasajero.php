@@ -95,8 +95,8 @@ public function __toString(){
 	public function insertar(){
 		$base=new BaseDatos();
 		$resp= false;
-         /**rdocumento, pnombre, papellido, ptelefono, idviaje */
-		$consultaInsertar="INSERT INTO pasajero(rdocumento, pnombre, papellido, ptelefono, idviaje ) 
+         /**pdocumento, pnombre, papellido, ptelefono, idviaje */
+		$consultaInsertar="INSERT INTO pasajero(pdocumento, pnombre, papellido, ptelefono, idviaje ) 
 				VALUES ('".$this->getNroDni()."','".$this->getNombre()."','".$this->getApellido()."','".$this->getTelefono()."','".$this->getViaje()->getCodigo()."')";
 	
 		if($base->Iniciar()){
@@ -121,8 +121,8 @@ public function __toString(){
     public function modificar(){
 	    $resp =false; 
 	    $base=new BaseDatos();
-        /**rdocumento, pnombre, papellido, ptelefono, idviaje */
-		$consultaModifica="UPDATE pasajero SET rdocumento='".$this->getNroDni()."', pnombre='".$this->getNombre().
+        /**pdocumento, pnombre, papellido, ptelefono, idviaje */
+		$consultaModifica="UPDATE pasajero SET pdocumento='".$this->getNroDni()."', pnombre='".$this->getNombre().
                             "',papellido='".$this->getApellido()."', ptelefono='".$this->getTelefono()."', idviaje='".$this->getViaje()->getCodigo();
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){
@@ -143,7 +143,7 @@ public function __toString(){
 		$base=new BaseDatos();
 		$resp=false;
 		if($base->Iniciar()){
-				$consultaBorrar="DELETE FROM pasajero WHERE rdocumento=".$this->getNroDni();
+				$consultaBorrar="DELETE FROM pasajero WHERE pdocumento=".$this->getNroDni();
 				if($base->Ejecutar($consultaBorrar)){
 				    $resp=  true;
 				}else{
@@ -157,23 +157,25 @@ public function __toString(){
 	}
 
     /** BUSCAR
-	 * Recupera los datos de una persona por dni
+	 * Recupera los datos de un Pasjero por dni
 	 * @param int $dni
 	 * @return true en caso de encontrar los datos, false en caso contrario 
 	 */		
-    public function Buscar($nroDni){
+    public function buscar($nroDni){
 		$base=new BaseDatos();
-		$consultaPasajero="Select * from pasajero where rdocumento=".$nroDni;
+		$consultaPasajero="Select * from pasajero where pdocumento=".$nroDni;
 		$resp= false;
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaPasajero)){
-				if($row2=$base->Registro()){	
-                     /**rdocumento, pnombre, papellido, ptelefono, idviaje */				
+				if($registro=$base->Registro()){	
+                     /**pdocumento, pnombre, papellido, ptelefono, idviaje */				
 				    $this->setNroDni($nroDni);
-					$this->setNombre($row2['pnombre']);
-                    $this->setApellido($row2['papellido']);
-					$this->setTelefono($row2['ptelefono']);
-					$this->getViaje()->setCodigo($row2['idviaje']);
+					$this->setNombre($registro['pnombre']);
+                    $this->setApellido($registro['papellido']);
+					$this->setTelefono($registro['ptelefono']);
+					$objViaje = new Viaje();
+					$objViaje->buscar($registro['idviaje']);
+					
 					$resp= true;
 				}				
 			
@@ -195,21 +197,17 @@ public function __toString(){
 		if ($condicion!=""){
 		    $consultaPasajero=$consultaPasajero.' where '.$condicion;
 		}
-		$consultaPasajero.=" order by rdocumentoo";
+		$consultaPasajero.=" order by pdocumentoo";
 		//echo $consultaPasajero;
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaPasajero)){				
 				$arregloPasajero= array();
-				while($row2=$base->Registro()){
-					 /**rdocumento, pnombre, papellido, ptelefono, idviaje  */		
-					$nroDni=$row2['rdocumento'];
-					$nombre=$row2['pnombre'];
-					$apellido=$row2['papellido'];
-					$telefono= $row2['ptelefono'];
-                    $objViaje= $this->getViaje()->getCodigo() $row2['idviaje'];
+				while($registro=$base->Registro()){
+					 /**pdocumento, pnombre, papellido, ptelefono, idviaje  */		
 
 					$pasajero=new Pasajero();
-					$pasajero->cargar($nroDni, $nombre, $apellido, $telefono, $objViaje);
+					$pasajero->buscar($registro['pdocumento']);
+
 					array_push($arregloPasajero,$pasajero);              
 				}
 			

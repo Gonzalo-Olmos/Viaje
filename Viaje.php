@@ -302,8 +302,7 @@ class Viaje
 			if($base->Ejecutar($consultaModifica)){
 			    $resp=  true;
 			}else{
-				$this->setmensajeoperacion($base->getError());
-				
+				$this->setmensajeoperacion($base->getError());				
 			}
 		}else{
 				$this->setmensajeoperacion($base->getError());
@@ -332,25 +331,33 @@ class Viaje
 	}
 
     /** BUSCAR
-	 * Recupera los datos de una persona por dni
+	 * Recupera los datos de un viaje por dni
 	 * @param int $dni
 	 * @return true en caso de encontrar los datos, false en caso contrario 
 	 */		
-    public function Buscar($codigo){
+    public function buscar($codigo){
 		$base=new BaseDatos();
-		$consultaPersona="Select * from persona where idviaje=".$codigo;
+		$consultaViaje="Select * from viaje where idviaje=".$codigo;
 		$resp= false;
 		if($base->Iniciar()){
-			if($base->Ejecutar($consultaPersona)){
-				if($row2=$base->Registro()){					
-				    $this->setCodigo($codigo);
-					$this->setDestino($row2['vdestino']);
-					$this->getEmpresa()->setIdEmpresa($row2['idempresa']);
-					$this->setCantMaxPasajeros($row2['vcantmaxpasajeros']);
-                    $this->getResponsableViaje()->setNroEmpleado($row2['rnumeroempleado']);
-                    $this->setImporte($row2['vimporte']);
-                    $this->setTipoAsiento($row2['tipoAsiento']);
-                    $this->setIdaYvuelta($row2['idayvuelta']);
+			if($base->Ejecutar($consultaViaje)){
+				if($registro=$base->Registro()){					
+				    $this->setCodigo($codigo); // ¿porqué le seteo el codigo? ¿porqué seteo todos los atributos? para cargar datos de un objeto vacio
+					$this->setDestino($registro['vdestino']); 
+
+                    $objEmpresa= new Empresa();
+                    $objEmpresa->buscar($registro['idempresa']);
+					$this->setEmpresa($objEmpresa);
+
+					$this->setCantMaxPasajeros($registro['vcantmaxpasajeros']);
+
+                    $objResponsable= new ResponsableV();
+                    $objResponsable->buscar($registro['rnumeroempleado']);
+                    $this->setResponsableViaje($objResponsable);
+
+                    $this->setImporte($registro['vimporte']);
+                    $this->setTipoAsiento($registro['tipoAsiento']);
+                    $this->setIdaYvuelta($registro['idayvuelta']);
 					$resp= true;
 				}				
 			
@@ -377,19 +384,30 @@ class Viaje
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaViaje)){				
 				$arregloViaje= array();
-				while($row2=$base->Registro()){
+				while($registro=$base->Registro()){
 					
-					$codigo=$row2['idviaje'];
-					$destino=$row2['vdestino'];
-					$cantMaxPasajeros=$row2['vcantmaxpasajeros'];
-					$objEmpresa= $row2['idempresa'];
-                    $objResponsableViaje = $this->getResponsableViaje()  /**$row2['rnumeroempleado']*/ ;
-                    $importe=  $row2['vimporte'];
-                    $tipoAsiento=  $row2['tipoAsiento'];
-                    $idaYvuelta=  $row2['idayvuelta'];
+/* 					$codigo= $registro['idviaje'];
+					$destino= $registro['vdestino'];
+					$cantMaxPasajeros= $registro['vcantmaxpasajeros'];
+					$idEmpresa= $registro['idempresa'];
+                    $nroEmpleadoResp = $registro['rnumeroempleado'];
+                    $importe=  $registro['vimporte'];
+                    $tipoAsiento=  $registro['tipoAsiento'];
+                    $idaYvuelta=  $registro['idayvuelta'];
+                
+                    $objEmpresa= new Empresa();
+                    $objEmpresa->buscar($idEmpresa);
+
+                    $objResponsableViaje= new ResponsableV();
+                    $objResponsableViaje->buscar($nroEmpleadoResp);
 
 					$viaje=new Viaje();
 					$viaje->cargar($codigo, $destino, $objEmpresa, $cantMaxPasajeros, $objResponsableViaje, $importe, $tipoAsiento, $idaYvuelta);
+ */
+                  
+                    $viaje=new Viaje();
+                    $viaje->buscar( $registro['idviaje']);
+                    
 					array_push($arregloViaje,$viaje);              
 				}
 			
