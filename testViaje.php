@@ -1,5 +1,5 @@
 <?php
-include_once("Viaje.php");
+/* include_once("Viaje.php"); */
 include_once("Pasajero.php");
 include_once("ResponsableV.php");
 include_once("Terrestres.php");
@@ -8,7 +8,7 @@ include_once("Aereos.php");
  /**Esta funcion carga predeterminadamente informacion de un viaje Nuevo
   *@return Viaje viaje cargado
   */
- function carga_info_viaje(){
+/*   function carga_info_viaje(){
     //creo un objeto ResponsableV
     $objResponsable = new ResponsableV(23, 1111, "Mario", "Crespo");
 
@@ -41,12 +41,12 @@ include_once("Aereos.php");
 
 return $objetoViaje;
 }
- 
+  */
 
 /**Funcion que mofifica los datos del viaje
  *@param Viaje $objViaje
  */
-function modificar_datos($objViaje){
+/* function modificar_datos($objViaje){
     //obtengo la coleccion de pasajeros
     $colPasajeros = $objViaje->getColeccion_pasajeros();
 
@@ -73,12 +73,12 @@ echo("Desea Modificar un pasajero? (si/no): ");
     }
 
 }
-
+ */
 
 /**Nueva funcion que modifica los datos de un Pasajero
  * 
  */
-function modificarDatosPasajero($objetoViaje){
+/* function modificarDatosPasajero($objetoViaje){
   
       echo("Ingrese el DNI del pasajero que desea Modificar:  ");
       $dni = trim(fgets(STDIN)); 
@@ -102,6 +102,178 @@ function modificarDatosPasajero($objetoViaje){
         }
 }
 
+ */
+
+
+/**Funcion que carga un viaje a la base de datos
+ * 
+ */
+function cargarViaje(){
+    $objViaje = new Viaje();
+    $objEmpresa = new Empresa();
+    $objResponsable = new ResponsableV();
+    //antes de cargar verifico que hayan empresas y responsables cargados
+    if ( verificarEmpresasCargadas()==false ) {
+        echo("!No hay ninguna Empresa Cargada! \n Cargue al menos una, antes de cargar un viaje");
+        selectOpcionEmpresa();
+    }
+    if (verificarResponsablesCargadas()==false ) {
+        echo("!No hay ningun Responsable Cargado! \n Cargue al menos uno, antes de cargar un viaje");
+        selectOpcionResponsable();
+    }
+
+    echo("Ingrese el Destino: ");
+    $destino = trim(fgets(STDIN));
+
+    echo("Eliga una de las siguientes empresas: ");
+    $idempresa = elegirEmpresa();
+    $objEmpresa->buscar($idempresa);
+
+    echo("Ingrese cantidad maxima de pasajeros: ");
+    $cantMaxPasajeros = trim(fgets(STDIN));
+
+    echo("Ingrese uno de los siguientes Responsable: ");
+    $nroempleado = elegirResponsable();
+    $objResponsable->buscar($nroempleado);
+
+    echo("Ingrese el Importe: ");
+    $importe = trim(fgets(STDIN));
+
+    echo("Ingrese Tipo de Asiento: (cama/semicama) ");
+    $tipoAsiento = trim(fgets(STDIN));
+    
+    echo("el viaje es ida y vuelta (si/no)");
+    $idaYvuelta = trim(fgets(STDIN));
+
+
+    $objViaje->cargar($destino, $objEmpresa, $cantMaxPasajeros, $objResponsable, $importe, $tipoAsiento, $idaYvuelta);
+
+    
+    //Hacer una funcion para cargar pasajeros de acuerdo a la cantidad maxima de pasajeros
+        //que esta funcion se encarge de insertarlos a la base de datos.
+        //que verifque que el pasajero a cargar no esté cargado.
+    
+
+
+        
+    //¿Permitir cargar a los pasajeros antes, sin un viaje asignado?  NO, si carga un pasajero que obligatoria mente le asigne un viaje
+        // 
+
+
+    if ($objViaje->insertar()) {
+        echo("                !EXITO!               \n    El Viaje se Cargó Correctamente");
+    }
+    
+
+
+}
+
+
+/**
+ * Esta funcion verifica que hayan empresas cargadas
+ * @return bol true en caso de que hayan empresas cargadas, false en caso contrario
+ */
+function verificarEmpresasCargadas(){
+    $result = true;
+    $arregloEmpresas = array();
+    $objEmpresa = new Empresa();
+
+    $arregloEmpresas = $objEmpresa->listar();
+
+    if ($arregloEmpresas == null) {
+        $result = false;
+    }
+
+return $result;
+}
+
+/**
+ * Esta funcion verifica que hayan Responsables cargados
+ * @return bol true en caso de que hayan Responsables cargados, false en caso contrario
+ */
+function verificarResponsablesCargadas(){
+    $result = true;
+    $arregloResponsables = array();
+    $objResponsable = new Empresa();
+
+    $arregloResponsables = $objResponsable->listar();
+
+    if ($arregloResponsables == null) {
+        $result = false;
+    }
+
+return $result;
+}
+
+
+/**Esta funcion le da al usuario la opcion de elegir que Responsable quiere
+ * @return int nroEmpleado del responsable elegido
+ */
+function elegirResponsable(){
+    $arregloResponsable = array();
+    $objResponsable = new ResponsableV();
+
+    $arregloResponsable = $objResponsable->listar();
+    mostrar_arreglo_responsable($arregloResponsable);
+    
+    echo("Responsable: ").$opcion = trim(fgets(STDIN));
+
+    $nroEmpleado = $arregloResponsable[$opcion -1]->getNroEmpleado();
+
+    return $nroEmpleado;
+}
+
+/**Esta funcion le da al usuario la opcion de elegir que empresa quiere
+ * @return int id de la empresa elegida
+ */
+function elegirEmpresa(){
+    $arregloEmpresas = array();
+    $objEmpresa = new Empresa();
+
+    $arregloEmpresas = $objEmpresa->listar();
+    mostrar_arreglo_empresa($arregloEmpresas);
+    
+    echo("Empresa Nro: ").$opcion = trim(fgets(STDIN));
+
+    $idEmpresa = $arregloEmpresas[$opcion -1]->getIdEmpresa();
+
+    return $idEmpresa;
+}
+
+   /**Está funcion hace un recorrido al arreglo para mostrar la informacion del arreglo
+     * @return String
+     */
+    function mostrar_arreglo_empresa($arreglo)
+    {
+      
+        $cadena = " ";
+        for ($i = 0; $i < count($arreglo); $i++) {
+            $objEmpresa = $arreglo[$i];
+            $cadena = $cadena . "\n--- Empresa " . ($i + 1) . " ---: \n";
+            $cadena = $cadena . $objEmpresa;
+        }
+        return $cadena;
+    }
+
+  /**Está funcion hace un recorrido al arreglo para mostrar la informacion del arreglo
+     * @return String
+     */
+    function mostrar_arreglo_responsable($arreglo)
+    {
+      
+        $cadena = " ";
+        for ($i = 0; $i < count($arreglo); $i++) {
+            $objResponsable = $arreglo[$i];
+            $cadena = $cadena . "\n--- Responsable " . ($i + 1) . " ---: \n";
+            $cadena = $cadena . $objResponsable;
+        }
+        return $cadena;
+    }
+
+
+
+
+
 
 //MENU DE OPCIONES
 do{
@@ -110,19 +282,19 @@ do{
     switch ($opcion) {
         case '1':
             //submenu viajes
-
+            selectOpcionViaje();
             break;
         case '2':
             //submenu empresas
-          
+            selectOpcionEmpresa();
             break;
         case '3':
             //submenu responsables
-                
+            selectOpcionResponsable();
             break;
         case '4':
             //submenu pasajeros
-               
+            selectOpcionPasajero();
            break;
         case '5':
             //Salir
@@ -186,19 +358,46 @@ function selectOpcionViaje(){
     $opcion = 0;
   
     while($opcion != 5){
- 	  
+        echo" \n";
+        echo"Menu VIAJE: \n";
         echo"1)Cargar un nuevo Viaje\n"; 
         echo"2)Modificar un Viaje\n"; 
         echo"3)Eliminar un Viaje\n"; 
    	    echo"4)Listar Viajes\n";
-        echo"5)Salir \n";
+        echo"5)Volver \n";
    	    
    	    $opcion = solicitarNumeroEntre(1,5);
-	    if($opcion!= 5){
+	  /*       if($opcion!= 5){
             break;
-        }      
+        }  */
+        
+            switch ($opcion) {
+                case '1':
+                    //
+                    echo("entré 1 ");
+
+                    cargarViaje();
+
+                    break;
+                case '2':
+                    //
+                    echo("entré 2 ");
+                    break;
+                case '3':
+                    //
+                    echo("entré 3");
+                    break;
+                case '4':
+                    //
+                    echo("entré 4");
+                   break;
+                case '5':
+                    //volver
+                     $opcion = 5;
+                    break;
+                }
+
     }
-    return $opcion;
 }
 
 /** 
@@ -210,19 +409,47 @@ function selectOpcionResponsable(){
     $opcion = 0;
   
     while($opcion != 5){
- 	  
-        echo"1)Cargar un nuevo Responsable\n"; 
-        echo"2)Modificar un Responsable\n"; 
-        echo"3)Eliminar un Responsable\n"; 
-   	    echo"4)Listar Responsables\n";
-        echo"5)Salir \n";
+ 
    	    
-   	    $opcion = solicitarNumeroEntre(1,5);
-	    if($opcion!= 5){
-            break;
-        }      
+        while($opcion != 5){
+            echo" \n";
+            echo"Menu RESPONSABLES: \n";
+            echo"1)Cargar un nuevo Responsable\n"; 
+            echo"2)Modificar un Responsable\n"; 
+            echo"3)Eliminar un Responsable\n"; 
+               echo"4)Listar Responsables\n";
+            echo"5)Volver \n";
+               
+               $opcion = solicitarNumeroEntre(1,5);
+          /*       if($opcion!= 5){
+                break;
+            }  */
+            
+                switch ($opcion) {
+                    case '1':
+                        //
+                        echo("entré 1 ");
+                        break;
+                    case '2':
+                        //
+                        echo("entré 2 ");
+                        break;
+                    case '3':
+                        //
+                        echo("entré 3");
+                        break;
+                    case '4':
+                        //
+                        echo("entré 4");
+                       break;
+                    case '5':
+                        //volver
+                         $opcion = 5;
+                        break;
+                    }
+        }
     }
-    return $opcion;
+   
 }
 
 /** 
@@ -234,20 +461,44 @@ function selectOpcionPasajero(){
     $opcion = 0;
   
     while($opcion != 5){
- 	  
+        echo" \n";
+        echo"Menu PASAJEROS: \n";
         echo"1)Cargar un nuevo Pasajero\n"; 
         echo"2)Modificar un Pasajero\n"; 
         echo"3)Eliminar un Pasajero\n"; 
    	    echo"4)Listar Pasajeros\n";
-        echo"5)Salir \n";
+        echo"5)Volver \n";
    	    
-   	    $opcion = solicitarNumeroEntre(1,5);
-	    if($opcion!= 5){
-            break;
-        }      
-    }
-    return $opcion;
-}
+        $opcion = solicitarNumeroEntre(1,5);
+        /*       if($opcion!= 5){
+              break;
+          }  */
+          
+              switch ($opcion) {
+                  case '1':
+                      //
+                      echo("entré 1 ");
+                      break;
+                  case '2':
+                      //
+                      echo("entré 2 ");
+                      break;
+                  case '3':
+                      //
+                      echo("entré 3");
+                      break;
+                  case '4':
+                      //
+                      echo("entré 4");
+                     break;
+                  case '5':
+                      //volver
+                       $opcion = 5;
+                      break;
+                  }
+
+      }
+  }
 
 /** 
 * Esta funcion permite seleccionar una opcion del submenu Empresas
@@ -258,19 +509,43 @@ function selectOpcionEmpresa(){
     $opcion = 0;
   
     while($opcion != 5){
- 	  
+ 	   echo" \n";
+        echo"Menu EMPRESAS: \n";
         echo"1)Cargar una nueva Empresa\n"; 
         echo"2)Modificar una Empresa\n"; 
         echo"3)Eliminar una Empresa\n"; 
    	    echo"4)Listar Empresas\n";
-        echo"5)Salir \n";
+        echo"5)Volver \n";
    	    
-   	    $opcion = solicitarNumeroEntre(1,5);
-	    if($opcion!= 5){
-            break;
-        }      
-    }
-    return $opcion;
-}
-
+        $opcion = solicitarNumeroEntre(1,5);
+        /*       if($opcion!= 5){
+              break;
+          }  */
+          
+              switch ($opcion) {
+                  case '1':
+                      //
+                      echo("entré 1 ");
+                      break;
+                  case '2':
+                      //
+                      echo("entré 2 ");
+                      break;
+                  case '3':
+                      //
+                      echo("entré 3");
+                      break;
+                  case '4':
+                      //
+                      echo("entré 4");
+                     break;
+                  case '5':
+                      //volver
+                       $opcion = 5;
+                      break;
+                  }
+  
+      }
+  }
+      
 ?>

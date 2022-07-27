@@ -30,8 +30,7 @@ class Viaje
     }
 
     //Funcion Cargar
-    public function cargar($codigo, $destino, $objEmpresa, $cantMaxPasajeros,  $objResponsableViaje, $importe, $tipoAsiento, $idaYvuelta){
-        $this->setCodigo($codigo);
+    public function cargar($destino, $objEmpresa, $cantMaxPasajeros,  $objResponsableViaje, $importe, $tipoAsiento, $idaYvuelta){
         $this->setDestino($destino);
         $this->setEmpresa($objEmpresa);
         $this->setCantMaxPasajeros($cantMaxPasajeros);
@@ -425,3 +424,5 @@ class Viaje
 
 
 }
+
+?>
