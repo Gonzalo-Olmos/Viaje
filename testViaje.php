@@ -15,27 +15,27 @@ include_once("Aereos.php");
     //creo una instancia Viaje 
     $objetoViaje = new Viaje(1123, "El bolson", 10, $objResponsable, 15000, "si");
 
-    //creo 4 instancias de la clase Pasajero
-    $objPasajero1= new Pasajero("Juliana", "Olmos", 49412345, 2984234554);
-    $objPasajero2= new Pasajero("Graciela", "Fernzandez", 37412345, 2984675494);
-    $objPasajero3= new Pasajero("Gonzalo", "Olmos", 41193872, 2984906132 );
-    $objPasajero4= new Pasajero("Fernando", "Olmos", 37356341, 2984922170);
+    //creo 5 instancias de la clase Pasajero
+    $objPasajero1= new Pasajero("Juliana", "Olmos", 59512355, 2985235555);
+    $objPasajero2= new Pasajero("Graciela", "Fernzandez", 37512355, 2985675595);
+    $objPasajero3= new Pasajero("Gonzalo", "Olmos", 51193872, 2985906132 );
+    $objPasajero5= new Pasajero("Fernando", "Olmos", 37356351, 2985922170);
     //agrego a un array los pasajeros
     $arrayPasajeros[0] =$objPasajero1;
     $arrayPasajeros[1] =$objPasajero2;
     $arrayPasajeros[2] =$objPasajero3;
-    $arrayPasajeros[3] =$objPasajero4;
+    $arrayPasajeros[3] =$objPasajero5;
     //seteo el array a la coleccion de pasajeros de la clase Viaje
     $objetoViaje->setColeccion_pasajeros($arrayPasajeros);
 
     //Venta de pasajes
     echo "Venta de Pasaje Terrestre: \n";
-    $objViajeTerrestre = new Terrestres(67584, "Villa la angostura", 8,  $objResponsable,  50000, "si", "cama");
+    $objViajeTerrestre = new Terrestres(67585, "Villa la angostura", 8,  $objResponsable,  50000, "si", "cama");
     $importe = $objViajeTerrestre->venderPasaje($objPasajero1);
     echo "Importe de venta: $".$importe;
     echo " \n";
     echo "Venta de Pasaje Aereo: \n";
-    $objViajeAereo= new Aereos(67584, "Villa la angostura", 8,  $objResponsable,  50000, "si", 998, "primera clase", "Aerolineas argentina", 4);
+    $objViajeAereo= new Aereos(67585, "Villa la angostura", 8,  $objResponsable,  50000, "si", 998, "primera clase", "Aerolineas argentina", 5);
     $importe = $objViajeAereo->venderPasaje($objPasajero2);
     echo "Importe de venta: $".$importe;
 
@@ -109,23 +109,27 @@ do{
 
     switch ($opcion) {
         case '1':
-            //Cargar información de un viaje
-            $objViaje = carga_info_viaje();
+            //submenu viajes
+
             break;
         case '2':
-            //Modificar datos del viaje
-              modificar_datos($objViaje);
+            //submenu empresas
+          
             break;
         case '3':
-                 //Ver datos del viaje  
-                 echo $objViaje;
+            //submenu responsables
+                
             break;
         case '4':
-                //Salir
- 			$opcion = 4;
+            //submenu pasajeros
+               
+           break;
+        case '5':
+            //Salir
+ 			$opcion = 5;
             break;
         }
-}while( $opcion != 4);
+}while( $opcion != 5);
 
 
 /** 
@@ -138,16 +142,17 @@ function seleccionarOpcion(){
     echo" \n";
     echo"Elija una opcion valida: \n";
     echo" \n";
-    while($opcion != 4){
+    while($opcion != 5){
  	    echo"Menú de opciones \n";
         /**Cargar una empresa */
-        echo"1)Cargar Viaje \n";
-        echo"2)Modificar datos del viaje (incluyendo los datos del pasajero) \n";
-        echo"3)Ver datos del viaje \n";
-   	    echo"4) Salir \n";
+        echo"1)Viajes\n"; //submenu viajes
+        echo"2)Empresas\n"; //submenu empresas
+        echo"3)Responsables\n"; //submenu responsables
+   	    echo"4)Pasajeros \n"; //submenu pasajeros
+        echo"5)Salir \n";
    	    
-   	    $opcion = solicitarNumeroEntre(1,4);
-	    if($opcion!= 4){
+   	    $opcion = solicitarNumeroEntre(1,5);
+	    if($opcion!= 5){
             break;
         }      
     }
@@ -172,8 +177,100 @@ function solicitarNumeroEntre($min, $max)
 }
 
 
+/** 
+* Esta funcion permite seleccionar una opcion del submenu viajes
+* @return int
+*/
+function selectOpcionViaje(){
+    //int $opcion
+    $opcion = 0;
+  
+    while($opcion != 5){
+ 	  
+        echo"1)Cargar un nuevo Viaje\n"; 
+        echo"2)Modificar un Viaje\n"; 
+        echo"3)Eliminar un Viaje\n"; 
+   	    echo"4)Listar Viajes\n";
+        echo"5)Salir \n";
+   	    
+   	    $opcion = solicitarNumeroEntre(1,5);
+	    if($opcion!= 5){
+            break;
+        }      
+    }
+    return $opcion;
+}
 
+/** 
+* Esta funcion permite seleccionar una opcion del submenu Responsables
+* @return int
+*/
+function selectOpcionResponsable(){
+    //int $opcion
+    $opcion = 0;
+  
+    while($opcion != 5){
+ 	  
+        echo"1)Cargar un nuevo Responsable\n"; 
+        echo"2)Modificar un Responsable\n"; 
+        echo"3)Eliminar un Responsable\n"; 
+   	    echo"4)Listar Responsables\n";
+        echo"5)Salir \n";
+   	    
+   	    $opcion = solicitarNumeroEntre(1,5);
+	    if($opcion!= 5){
+            break;
+        }      
+    }
+    return $opcion;
+}
 
+/** 
+* Esta funcion permite seleccionar una opcion del submenu Pasajeros
+* @return int
+*/
+function selectOpcionPasajero(){
+    //int $opcion
+    $opcion = 0;
+  
+    while($opcion != 5){
+ 	  
+        echo"1)Cargar un nuevo Pasajero\n"; 
+        echo"2)Modificar un Pasajero\n"; 
+        echo"3)Eliminar un Pasajero\n"; 
+   	    echo"4)Listar Pasajeros\n";
+        echo"5)Salir \n";
+   	    
+   	    $opcion = solicitarNumeroEntre(1,5);
+	    if($opcion!= 5){
+            break;
+        }      
+    }
+    return $opcion;
+}
 
+/** 
+* Esta funcion permite seleccionar una opcion del submenu Empresas
+* @return int
+*/
+function selectOpcionEmpresa(){
+    //int $opcion
+    $opcion = 0;
+  
+    while($opcion != 5){
+ 	  
+        echo"1)Cargar una nueva Empresa\n"; 
+        echo"2)Modificar una Empresa\n"; 
+        echo"3)Eliminar una Empresa\n"; 
+   	    echo"4)Listar Empresas\n";
+        echo"5)Salir \n";
+   	    
+   	    $opcion = solicitarNumeroEntre(1,5);
+	    if($opcion!= 5){
+            break;
+        }      
+    }
+    return $opcion;
+}
 
 ?>
