@@ -21,7 +21,7 @@ public function __construct(){
     $this->objViaje= new Viaje();
 }
 
-public function cargar($nombre, $apellido, $nroDni, $telefono, $objViaje){
+public function cargar( $nroDni, $nombre, $apellido,$telefono, $objViaje){
     $this->setNombre($nombre);
     $this->setApellido($apellido);
     $this->setNroDni($nroDni);
@@ -165,8 +165,11 @@ public function __toString(){
 		$base=new BaseDatos();
 		$consultaPasajero="Select * from pasajero where pdocumento=".$nroDni;
 		$resp= false;
+
 		if($base->Iniciar()){
+			
 			if($base->Ejecutar($consultaPasajero)){
+				
 				if($registro=$base->Registro()){	
                      /**pdocumento, pnombre, papellido, ptelefono, idviaje */				
 				    $this->setNroDni($nroDni);
@@ -176,6 +179,7 @@ public function __toString(){
 					$objViaje = new Viaje();
 					$objViaje->buscar($registro['idviaje']);
 					
+				
 					$resp= true;
 				}				
 			

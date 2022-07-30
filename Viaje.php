@@ -27,17 +27,21 @@ class Viaje
         $this->importe  = "";
         $this->tipoAsiento  = "";
         $this->idaYvuelta = "";
+        $this->coleccion_pasajeros = array();
     }
 
     //Funcion Cargar
-    public function cargar($destino, $objEmpresa, $cantMaxPasajeros,  $objResponsableViaje, $importe, $tipoAsiento, $idaYvuelta){
+    public function cargar($idviaje, $destino, $objEmpresa, $cantMaxPasajeros,  $objResponsableViaje, $importe, $tipoAsiento, $idaYvuelta, $coleccion_pasajeros){
+        
+        $this->setCodigo($idviaje);
         $this->setDestino($destino);
         $this->setEmpresa($objEmpresa);
         $this->setCantMaxPasajeros($cantMaxPasajeros);
         $this->setResponsableViaje($objResponsableViaje);
         $this->setImporte($importe);
         $this->setTipoAsiento($tipoAsiento);
-        $this->setIdaYvuelta($idaYvuelta);
+        $this->setIdaYvuelta($idaYvuelta); 
+        $this->setColeccion_pasajeros($coleccion_pasajeros); 
     }
 
 
@@ -114,7 +118,7 @@ class Viaje
     }
     public function setResponsableViaje($responsableViaje)
     {
-        $this->responsableViaje = $responsableViaje;
+        $this->objResponsableViaje = $responsableViaje;
     }
 
     public function setTipoAsiento($tipoAsiento)
@@ -274,7 +278,9 @@ class Viaje
 
 			if($base->Ejecutar($consultaInsertar)){
 
-			    $resp=  true;
+               /*  $idInsercion = $base->devuelveIDInsercion($consultaInsertar);
+                $resp=  $idInsercion ;  */
+			    $resp=  true; 
 
 			}	else {
 					$this->setmensajeoperacion($base->getError());
@@ -341,7 +347,7 @@ class Viaje
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaViaje)){
 				if($registro=$base->Registro()){					
-				    $this->setCodigo($codigo); // ¿porqué le seteo el codigo? ¿porqué seteo todos los atributos? para cargar datos de un objeto vacio
+				    $this->setCodigo($codigo); 
 					$this->setDestino($registro['vdestino']); 
 
                     $objEmpresa= new Empresa();
@@ -420,6 +426,7 @@ class Viaje
 		 }	
 		 return $arregloViaje;
 	}	
+
 
 
 

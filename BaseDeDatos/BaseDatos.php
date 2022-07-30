@@ -15,7 +15,7 @@ class BaseDatos {
      * vinculadas a la coneccion con el Servidor de BD
      */
     public function __construct(){
-        $this->HOSTNAME = "172.0.0.1:3306";
+        $this->HOSTNAME = "127.0.0.1:3306";
         $this->BASEDATOS = "bdviajes";
         $this->USUARIO = "devuser";
         $this->CLAVE="UN4J[{5Rp;KcU.n(";
@@ -109,7 +109,8 @@ class BaseDatos {
         unset($this->ERROR);
         $this->QUERY = $consulta;
         if ($this->RESULT = mysqli_query($this->CONEXION,$consulta)){
-            $id = mysqli_insert_id();
+            
+            $id = mysqli_insert_id(mysqli_connect($this->HOSTNAME,$this->USUARIO,$this->CLAVE,$this->BASEDATOS));
             $resp =  $id;
         } else {
             $this->ERROR =mysqli_errno( $this->CONEXION) . ": " . mysqli_error( $this->CONEXION);

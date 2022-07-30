@@ -1,5 +1,5 @@
 CREATE DATABASE bdviajes; 
-
+use bdviajes;
 CREATE TABLE empresa(
     idempresa bigint AUTO_INCREMENT,
     enombre varchar(150),
@@ -37,8 +37,7 @@ CREATE TABLE pasajero (
     papellido varchar(150), 
 	ptelefono int, 
 	idviaje bigint,
-    PRIMARY KEY (rdocumento),
+    PRIMARY KEY (pdocumento),
 	FOREIGN KEY (idviaje) REFERENCES viaje (idviaje)	
     )ENGINE=InnoDB DEFAULT CHARSET=utf8; 
- 
-  
+

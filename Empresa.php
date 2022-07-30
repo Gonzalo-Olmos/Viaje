@@ -18,7 +18,7 @@ public function __construct(){
 
 public function cargar($idEmpresa, $enombre, $edireccion){
 
-    $this->setIdEmpresa($idEmpresa);
+	$this->setIdEmpresa($idEmpresa);  
     $this->setEnombre($enombre);
     $this->setEdireccion($edireccion);
 }
@@ -71,7 +71,7 @@ public function __toString(){
 		$base=new BaseDatos();
 		$resp= false;
          /**idEmpresa, enombre, edireccion */
-		$consultaInsertar="INSERT INTO empresa(idEmpresa, enombre, edireccion) 
+		$consultaInsertar="INSERT INTO empresa(idempresa, enombre, edireccion) 
 				VALUES ('".$this->getIdEmpresa()."','".$this->getEnombre()."','".$this->getEdireccion()."')";
 	
 		if($base->Iniciar()){
