@@ -371,8 +371,8 @@ public function cargarPasajeros($cant)
 
 			if($base->Ejecutar($consultaInsertar)){
 
-               /*  $idInsercion = $base->devuelveIDInsercion($consultaInsertar);
-                $resp=  $idInsercion ;  */
+              /*   $idInsercion = $base->devuelveIDInsercion($consultaInsertar);
+                $resp=  $idInsercion ;   */
 			    $resp=  true; 
 
 			}	else {

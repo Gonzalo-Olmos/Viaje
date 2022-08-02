@@ -1187,12 +1187,6 @@ function selectOpcionEmpresa()
 }
 
 
-
-
-
-
-
-
 function modificarEmpresa(){
 
     $objEmpresa = new Empresa();
@@ -1418,6 +1412,14 @@ function listarPasajeros(){
     $objPasajero =new Pasajero();
 
     $arrayPasajeros= $objPasajero->listar();
+
+    if ($arrayPasajeros= $objPasajero->listar()) {
+        # code...
+
+    }else{
+
+    }
+
 
    echo" ".implode($arrayPasajeros);
 
