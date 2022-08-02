@@ -4,106 +4,6 @@ include_once("Pasajero.php");
 include_once("ResponsableV.php");
 include_once("Empresa.php");
 
-/**Esta funcion carga predeterminadamente informacion de un viaje Nuevo
- *@return Viaje viaje cargado
- */
-/*   function carga_info_viaje(){
-    //creo un objeto ResponsableV
-    $objResponsable = new ResponsableV(23, 1111, "Mario", "Crespo");
-
-    //creo una instancia Viaje 
-    $objetoViaje = new Viaje(1123, "El bolson", 10, $objResponsable, 15000, "si");
-
-    //creo 5 instancias de la clase Pasajero
-    $objPasajero1= new Pasajero("Juliana", "Olmos", 59512355, 2985235555);
-    $objPasajero2= new Pasajero("Graciela", "Fernzandez", 37512355, 2985675595);
-    $objPasajero3= new Pasajero("Gonzalo", "Olmos", 51193872, 2985906132 );
-    $objPasajero5= new Pasajero("Fernando", "Olmos", 37356351, 2985922170);
-    //agrego a un array los pasajeros
-    $arrayPasajeros[0] =$objPasajero1;
-    $arrayPasajeros[1] =$objPasajero2;
-    $arrayPasajeros[2] =$objPasajero3;
-    $arrayPasajeros[3] =$objPasajero5;
-    //seteo el array a la coleccion de pasajeros de la clase Viaje
-    $objetoViaje->setColeccion_pasajeros($arrayPasajeros);
-
-    //Venta de pasajes
-    echo "Venta de Pasaje Terrestre: \n";
-    $objViajeTerrestre = new Terrestres(67585, "Villa la angostura", 8,  $objResponsable,  50000, "si", "cama");
-    $importe = $objViajeTerrestre->venderPasaje($objPasajero1);
-    echo "Importe de venta: $".$importe;
-    echo " \n";
-    echo "Venta de Pasaje Aereo: \n";
-    $objViajeAereo= new Aereos(67585, "Villa la angostura", 8,  $objResponsable,  50000, "si", 998, "primera clase", "Aerolineas argentina", 5);
-    $importe = $objViajeAereo->venderPasaje($objPasajero2);
-    echo "Importe de venta: $".$importe;
-
-return $objetoViaje;
-}
-  */
-
-/**Funcion que mofifica los datos del viaje
- *@param Viaje $objViaje
- */
-/* function modificar_datos($objViaje){
-    //obtengo la coleccion de pasajeros
-    $colPasajeros = $objViaje->getColeccion_pasajeros();
-
-//Pide los datos del viaje En caso de que se deseen modificar
-echo("Desea Modificar el Codigo del viaje? (si/no): ");
-    $respuesta = trim(fgets(STDIN));
-if ($respuesta == "si") {
-    echo("Ingrese el Nuevo Codigo: \n");
-    $codigo = trim(fgets(STDIN));
-    $objViaje->setCodigo($codigo);
-}
-echo("Desea Modificar el Destino del viaje? (si/no): ");
-    $respuesta = trim(fgets(STDIN));
-if ($respuesta == "si") {
-    echo("Ingrese el Nuevo Destino: \n");
-    $destino = trim(fgets(STDIN));
-    $objViaje->setDestino($destino);
-}
-
-echo("Desea Modificar un pasajero? (si/no): ");
-    $respuesta=trim(fgets(STDIN));
-    if ($respuesta == "si") {
-        modificarDatosPasajero($objViaje);
-    }
-
-}
- */
-
-/**Nueva funcion que modifica los datos de un Pasajero
- * 
- */
-/* function modificarDatosPasajero($objetoViaje){
-  
-      echo("Ingrese el DNI del pasajero que desea Modificar:  ");
-      $dni = trim(fgets(STDIN)); 
-      //invocacion al metodo para buscar en que posicion se encuentra el pasajero
-     $posicionPasajero = $objetoViaje->buscarPasajero($dni);
-     
-        if ($posicionPasajero != -1) {
-        //Pide datos del pasajero
-         echo("Ingrese el Nuevo Nombre: ");
-         $nombre = trim(fgets(STDIN));
-         echo("Ingrese el Nuevo Apellido: ");
-         $apellido = trim(fgets(STDIN));
-        echo("Ingrese el Nuevo Dni: ");
-        $nuevoDni = trim(fgets(STDIN));
-         echo("Ingrese el Nuevo Nro de Telefono: ");
-         $nroTelefono = trim(fgets(STDIN));
-
-         $objetoViaje->modifica_datos_pasajero($nombre, $apellido, $nuevoDni, $nroTelefono, $posicionPasajero);
-        }else {
-        echo"\\\\Error este pasajero no se encuentra en la coleccion////";
-        }
-}
-
- */
-
-
 
 /**
  * Funcion que carga un viaje a la base de datos
@@ -116,12 +16,13 @@ function cargarViaje()
     //antes de cargar verifico que hayan empresas y responsables cargados
 
     if (verificarEmpresasCargadas() == false) {
-        echo ("!No hay ninguna Empresa Cargada! \n Cargue al menos una, antes de cargar un viaje");
-        
+        echo ("\n!No hay ninguna Empresa Cargada! \n Cargue al menos una, antes de cargar un viaje");
+        cargarEmpresa();
     }
     if (verificarResponsablesCargados() == false) {
 
-        echo ("!No hay ningun Responsable Cargado! \n Cargue al menos uno, antes de cargar un viaje");
+        echo ("\n!No hay ningun Responsable Cargado! \n Cargue al menos uno, antes de cargar un viaje\n");
+        cargarResponsable();
     }
 
 
@@ -136,7 +37,7 @@ function cargarViaje()
             $repite = true;
         }
     } while ($repite);
-
+ 
 
     //Verifico que no se repita el Destino, la Empresa y el Responsable en otro viaje
     do {
@@ -167,14 +68,15 @@ function cargarViaje()
 
 
 
-    $objViaje->cargar($idviaje, $destino, $objEmpresa, $cantMaxPasajeros, $objResponsable, $importe, $tipoAsiento, $idaYvuelta);
+     $objViaje->cargar($idviaje, $destino, $objEmpresa, $cantMaxPasajeros, $objResponsable, $importe, $tipoAsiento, $idaYvuelta); 
 
+ 
     // Inserto el OBj Viaje en la base de datos
     $respuesta =  $objViaje->insertar();
 
     if ($respuesta) {
         echo "\n /\/\/El Viaje fue ingresado Con Exito\/\/\' \n";
-        /*     echo"id viaje: ".$objViaje->getCodigo(); */
+            
     } else {
         echo $objViaje->getmensajeoperacion();
     }
@@ -183,6 +85,8 @@ function cargarViaje()
     echo ("1-Ahora \n2-Más tarde\n");
     $opcion = trim(fgets(STDIN));
     if ($opcion == 1) {
+
+
 
         $objViaje->cargarPasajeros($cantMaxPasajeros);
     } else {
@@ -261,28 +165,27 @@ function seRepiteEmpresa($enombre)
  * @return bool true en caso de que se repita
  */
 function seRepiteResponsable($nroLicencia)
-{ 
-        $arregloResponsable = array();
-        $objResponsable = new ResponsableV();
+{
+    $arregloResponsable = array();
+    $objResponsable = new ResponsableV();
 
-        $arregloResponsable = $objResponsable->listar();
+    $arregloResponsable = $objResponsable->listar();
 
-        $seRepite = false;
-        $i = 0;
+    $seRepite = false;
+    $i = 0;
 
-        while ($i < count($arregloResponsable) && $seRepite == false) {
+    while ($i < count($arregloResponsable) && $seRepite == false) {
 
-            $licencia = $arregloResponsable[$i]->getNroLicencia();
+        $licencia = $arregloResponsable[$i]->getNroLicencia();
 
-            if ($licencia == $nroLicencia) {
-                echo ("ERROR-> Ya existe un Responsable con la mimsa Licencia: por favor ingrese otro Numero: \n \n");
-                $seRepite = true;
-            }
-
-            $i++;
+        if ($licencia == $nroLicencia) {
+            echo ("ERROR-> Ya existe un Responsable con la mimsa Licencia: por favor ingrese otro Numero: \n \n");
+            $seRepite = true;
         }
-        return $seRepite;
-    
+
+        $i++;
+    }
+    return $seRepite;
 }
 
 
@@ -412,9 +315,9 @@ function mostrar_arreglo($arreglo)
 
     $cadena = " ";
     for ($i = 0; $i < count($arreglo); $i++) {
-        $objEmpresa = $arreglo[$i];
-        $cadena = $cadena . "\n-- --- --- --- --- --\n";
-        $cadena = $cadena . $objEmpresa;
+        $obj= $arreglo[$i];
+        $cadena = $cadena . "\n --->+<------------>+<---\n";
+        $cadena = $cadena . $obj;
     }
     return $cadena;
 }
@@ -446,7 +349,7 @@ function cargarEmpresa()
     do {
 
 
-        do {
+    /*     do {
             $repite = false;
             echo ("Ingrese el ID de la empresa: ");
             $idEmpresa = trim(fgets(STDIN));
@@ -456,7 +359,7 @@ function cargarEmpresa()
                 echo ("ERROR-> este ID ya se encuentra cargado ingrese otro\n");
                 $repite = true;
             }
-        } while ($repite);
+        } while ($repite); */
 
         //verifico que no se repita el NOMBRE de la Empresa
         do {
@@ -470,7 +373,10 @@ function cargarEmpresa()
         echo ("\n");
 
 
-        $objEmpresa->cargar($idEmpresa, $enombre, $edireccion);
+       /*  $objEmpresa->cargar($idEmpresa, $enombre, $edireccion); */
+        $objEmpresa->setEnombre($enombre);
+        $objEmpresa->setEdireccion($edireccion);
+
 
         // Inserto el OBj Empresa en la base de datos
         $respuesta = $objEmpresa->insertar();
@@ -500,7 +406,7 @@ function cargarResponsable()
     $objResponsable = new ResponsableV();
     do {
 
-        /*   do {
+        /*  do {
             $repite = false;
             echo ("Ingrese el nro del Responsable: ");
             $nroEmpleado = trim(fgets(STDIN));
@@ -510,7 +416,7 @@ function cargarResponsable()
                 echo ("ERROR-> este nro de responsable ya se encuentra cargado ingrese otro\n");
                 $repite = true;
             }
-        } while ($repite); */
+        } while ($repite);  */
 
         //verifico que no se repita el nro de licencia del Responsable
         do {
@@ -527,7 +433,10 @@ function cargarResponsable()
         $apellidoR = trim(fgets(STDIN));
         echo ("\n");
 
-        $objResponsable->cargar(0, $nroLicencia, $nombreR, $apellidoR);
+       /*  $objResponsable->cargar(0, $nroLicencia, $nombreR, $apellidoR); */
+        $objResponsable->setNroLicencia( $nroLicencia);
+        $objResponsable->setNombre( $nombreR);
+        $objResponsable->setApellido( $apellidoR);
 
         // Inserto el Obj Responsable en la base de datos
         $respuesta = $objResponsable->insertar();
@@ -704,14 +613,14 @@ function modificarViaje()
                 } else {
                     echo $objViaje->getmensajeoperacion();
                 }
-            break;
+                break;
 
             default:
                 echo "\n ///Opcion Invalida///\n ";
                 break;
         }
-    }else {
-        echo"\n Este viaje No Existe\n ";
+    } else {
+        echo "\n Este viaje No Existe\n ";
     }
 }
 
@@ -866,7 +775,7 @@ function selectOpcionViaje()
                 break;
             case '4':
                 //Listar Viajes
-                echo ("entré 4");
+                    listarViajes();
                 break;
             case '5':
                 //volver
@@ -911,11 +820,12 @@ function selectOpcionResponsable()
 
                     break;
                 case '2':
-                    //
-                    echo ("entré 2 ");
+                    // MODIOFICAR RESPONSABLE
+                    modificarResponsable();
+                   
                     break;
                 case '3':
-                    //ELIMINAR EMPRESA
+                    //ELIMINAR Responsable
                     $objResponsable = new ResponsableV();
                     $objViaje = new Viaje();
                     $objPasajero = new Pasajero();
@@ -972,8 +882,8 @@ function selectOpcionResponsable()
 
                     break;
                 case '4':
-                    //
-                    echo ("entré 4");
+                    //LISTAR
+                    listarResponsables();
                     break;
                 case '5':
                     //volver
@@ -1159,8 +1069,8 @@ function selectOpcionPasajero()
 
                 break;
             case '4':
-                //
-                echo ("entré 4");
+                //LISTAR
+                listarPasajeros();
                 break;
             case '5':
                 //volver
@@ -1202,8 +1112,7 @@ function selectOpcionEmpresa()
                 break;
             case '2':
                 //MODIFICAR EMPRESA
-
-
+                modificarEmpresa();
 
                 break;
             case '3':
@@ -1267,7 +1176,7 @@ function selectOpcionEmpresa()
                 break;
             case '4':
                 //LISTAR EMPRESAS
-
+                listarEmpresas();
                 break;
             case '5':
                 //volver
@@ -1284,85 +1193,330 @@ function selectOpcionEmpresa()
 
 
 
-/**
- * Esta funcion carga una cantidad de pasajeros a la base de datos
- * @param int $cant cantidad maxima de pasajeros
- * @param Viaje $unviaje
- * @return array con los pasajeros cargados
- */
-/* function cargarPasajeros($cant, $unviaje)
-{
-    $i = 0;
-    $seguir = true;
+function modificarEmpresa(){
+
+    $objEmpresa = new Empresa();
+    $objViaje = new Viaje();
     $objPasajero = new Pasajero();
-    $arrayPasajeros = $unviaje->getColeccion_pasajeros();
 
-  
 
-    if (count($arrayPasajeros) >= $cant) {
+    //antes de actualizar la empresa debo actualizar el objEmpresa del/los viajes en los que se encuentra
+    echo ("Ingrese el ID de la empresa que desea Modificar: ");
+    $idEmpresa = trim(fgets(STDIN));
+    $condicionConsulta = "idempresa = " . $idEmpresa;
+
+    if ($objEmpresa->buscar($idEmpresa)) {
+
+
+        echo ("Seleccione el Atributo que desea Modificar:\n ");
+        echo "1-Nombre \n 2-Direccion\n";
+        $opcion = trim(fgets(STDIN));
+
+        switch ($opcion) {
+            
+            //Comienzo CASO 1
+            case '1': 
+
+                //verifico que no se repita el NOMBRE de la Empresa
+                do {
+                    echo ("Ingrese el nuevo Nombre: ");
+                    $nuevonombre = trim(fgets(STDIN));
+                    echo ("\n");
+                } while (seRepiteEmpresa($nuevonombre));
+
+                $objEmpresa->setEnombre($nuevonombre);
+
+
+                //verificar de que la empresa no esté relacionada con algún viaje
+                $arregloViajesAsociados = $objViaje->listar($condicionConsulta);
+
         
-        echo("ERROR-> No hay asientos disponibles---La cantidad maxima de pasajeros es: ".$cant." y hay cargados: ".count($arrayPasajeros)." pasajeros");
-    }else{
+                if ($arregloViajesAsociados == null) {
+                    //procedo a la Actualizacion
+                    
+                    $respuesta = $objEmpresa->modificar();
 
-        
-    echo ("\nCarga de Pasajeros: \n");
+                    if ($respuesta == true) {
 
-    while ($i < $cant && $seguir) {
+                        echo " \n -.-.Los datos fueron actualizados correctamente.-.-";
+                    } else {
+                        echo $objEmpresa->getmensajeoperacion();
+                    }
+                } else {
+                    echo ("\n-La Empresa está asociada a un Viaje- \n");
+                    echo ("Se actualizara La Empresa de los viajes asociados, incluyendo la de los pasajeros\n Actualizar de Todos Modos? (si/no):\n");
+                    $opcion =  trim(fgets(STDIN));
 
-        //verifico que no esté cargado el mismo pasajero
-        do {
-            $repite = false;
-            echo ("Ingrese el Nro Documento: ");
-            $doc = trim(fgets(STDIN));
-            echo ("\n");
+                    if ($opcion == "si") {
+                        //seteo el nuevo nombre al objeto
+                        $objEmpresa->setEnombre($nuevonombre);
+                        //entro a una repetitiva y por cada registro de $arregloRegistrosViajes obtengo su IDviaje y actualizo el obj empresa
+                        for ($i = 0; $i < count($arregloViajesAsociados); $i++) {
 
-            $encontro = $objPasajero->buscar($doc);
+                            $idviaje = $arregloViajesAsociados[$i]->getCodigo();
 
-            if ($encontro) {
-                echo ("ERROR-> este pasajero ya se encuentra cargado \n");
-                $repite = true;
+                            //listo todos los pasajeros en un array. y actualizo todos los pasajeros con ese IDviaje
+                            $arrayPasajeros = $objPasajero->listarReferenciasPorID($idviaje);
+                            if (count($arrayPasajeros) > 0) {
+                                //actualizo cada registro del array
+                                for ($j = 0; $j < count($arrayPasajeros); $j++) {
+
+                                    $viaje = $arrayPasajeros[$j]->getViaje();
+                                    $viaje->setEmpresa($objEmpresa);
+
+                                    $arrayPasajeros[$j]->setViaje($viaje);
+
+                        
+                                    $arrayPasajeros[$j]->modificar();
+
+                                   
+                                }
+                                //ahora puedo actualizar el viaje
+                                $arregloViajesAsociados[$i]->setEmpresa($objEmpresa);
+                              
+                            } else {
+                                $arregloViajesAsociados[$i]->setEmpresa($objEmpresa);
+                                $arregloViajesAsociados[$i]->modificar();
+                            }
+                        }
+                        
+                        $respuesta = $objEmpresa->modificar();
+
+                        if ($respuesta == true) {
+
+                            echo " \n -.-.Los datos fueron actualizados correctamente.-.-";
+                        } else {
+                            echo $objEmpresa->getmensajeoperacion();
+                        }
+                    }
+                }
+
+
+                break;
+                //FIN CASO 1
+
+            case '2':
+                echo ("Ingrese la nueva Direccion: ");
+                $nuevaDireccion = trim(fgets(STDIN));
+                $objEmpresa->setEdireccion($nuevaDireccion);
+
+                $respuesta = $objEmpresa->modificar();
+
+                if ($respuesta == true) {
+
+                    echo " \n -.-.Los datos fueron actualizados correctamente.-.-";
+                } else {
+                    echo $objEmpresa->getmensajeoperacion();
+                }
+
+
+                break;
+            default:
+                echo "\n Opcion Invalida \n";
+                break;
+        }
+    } else {
+        echo ("\n -No Existe la Empresa que desea Actualizar-\n ");
+    }
+
+
+}
+
+
+
+
+function modificarResponsable(){
+
+    $objResponsable= new ResponsableV();
+
+    echo ("Ingrese el Nro de Empleado que desea Modificar: ");
+    $nroEmpleado = trim(fgets(STDIN));
+
+    if ($objResponsable->buscar($nroEmpleado )) {
+       
+    
+    echo ("Seleccione el Atributo que desea Modificar:\n ");
+    echo "1-nro Licencia \n 2-Apellido \n 3-Nombre \n ";
+    $opcion = trim(fgets(STDIN));
+
+
+    switch ($opcion) {
+        case '1':
+            echo ("Ingrese el nuevo Dato:\n ");
+            $nuevoDato = trim(fgets(STDIN));
+            $objResponsable->setNroLicencia($nuevoDato);
+
+            $respuesta = $objResponsable->modificar();
+
+            if ($respuesta == true) {
+
+                echo " \n -.-.Los datos fueron actualizados correctamente.-.-";
+            } else {
+                echo $objResponsable->getmensajeoperacion();
             }
-        } while ($repite);
 
-        echo ("Ingrese el Nombre: ");
-        $nombre = trim(fgets(STDIN));
-        echo ("\n");
-        echo ("Ingrese el apellido: ");
-        $apellido = trim(fgets(STDIN));
-        echo ("\n");
-        echo ("Ingrese el telefono: ");
-        $telefono = trim(fgets(STDIN));
-        echo ("\n");
+            break;
 
-        $objPasajero->cargar($doc, $nombre, $apellido, $telefono, $unviaje);
+        case '2':
+            echo ("Ingrese el nuevo Dato:\n ");
+            $nuevoDato = trim(fgets(STDIN));
+            $objResponsable->setApellido($nuevoDato);
 
-        // Inserto el OBj Pasajero en la base de datos
-        $respuesta = $objPasajero->insertar();
+            $respuesta = $objResponsable->modificar();
+
+            if ($respuesta == true) {
+
+                echo " \n -.-.Los datos fueron actualizados correctamente.-.-\n ";
+            } else {
+                echo $objResponsable->getmensajeoperacion();
+            }
+
+            break;
+
+        case '3':
+            echo ("Ingrese el nuevo Dato:\n ");
+            $nuevoDato = trim(fgets(STDIN));
+            $objResponsable->setNombre($nuevoDato);
+
+            $respuesta = $objResponsable->modificar();
+
+            if ($respuesta == true) {
+
+                echo " \n -.-.Los datos fueron actualizados correctamente.-.-";
+            } else {
+                echo $objResponsable->getmensajeoperacion();
+            }
+            break;
+
+        default:
+            echo "\n ///Opcion Invalida///\n ";
+            break;
+    }
+
+
+    }else {
+    echo"Este Responsable No existe";
+    }
+
+}
+
+
+function listarViajes(){
+
+    $objViaje =new Viaje();
+
+    $arrayViajes = $objViaje->listar("");
+
+    $viajes = mostrar_arreglo($arrayViajes);
+
+    echo $viajes;
+}
+
+
+function listarPasajeros(){
+
+    $objPasajero =new Pasajero();
+
+    $arrayPasajeros= $objPasajero->listar();
+
+   echo" ".implode($arrayPasajeros);
+
+  /*   $pasajeros = mostrar_arreglo($arrayPasajeros); 
+ 
+    echo $pasajeros;  */
+}
+
+function listarEmpresas(){
+
+    $objEmpresa =new Empresa();
+
+    $arrayEmpresas = $objEmpresa->listar();
+
+    $emrpesas = mostrar_arreglo($arrayEmpresas);
+
+    echo $emrpesas;
+}
+
+
+function listarResponsables(){
+    $objResponsable =new ResponsableV();
+
+    $arrayResponsable = $objResponsable->listar();
+
+    $responsables = mostrar_arreglo($arrayResponsable);
+
+    echo $responsables;
+
+
+}
+
+
+
+
+/* 
+function actualizarEmpresaEnCascada()
+{
+
+    //verificar de que la empresa no esté relacionada con algún viaje
+    $arregloViajesAsociados = $objViaje->listar($condicionConsulta);
+
+    if ($arregloViajesAsociados == null) {
+        //procedo a la Actualizacion
+
+        $objEmpresa->setEnombre($nuevonombre);
+
+        $respuesta = $objEmpresa->modificar();
+
         if ($respuesta == true) {
-            echo "\n/\/\/El Pasajero fue ingresado Con Exito\/\/\ \n";
-            array_push($arrayPasajeros, $objPasajero);
 
-            print_r($arrayPasajeros);
-            echo " ".count($arrayPasajeros);
-
-            $unviaje->setColeccion_pasajeros($arrayPasajeros);
-
+            echo " \n -.-.Los datos fueron actualizados correctamente.-.-";
         } else {
-            echo $objPasajero->getmensajeoperacion();
+            echo $objEmpresa->getmensajeoperacion();
         }
-        $i++;
+    } else {
+        echo ("\n-La Empresa está asociada a un Viaje- \n");
+        echo ("Se actualizara La Empresa de los viajes asociados, incluyendo la de los pasajeros\n Actualizar de Todos Modos? (si/no):\n");
+        $opcion =  trim(fgets(STDIN));
 
-        if ($i < $cant) {
-            echo ("¿Desea agregar el proximo pasajero? \n 1-Si \n 2-No \n");
-            $opcion = trim(fgets(STDIN));
-            if ($opcion == 2) {
-                $seguir = false;
+        if ($opcion == "si") {
+            //seteo el nuevo nombre al objeto
+            $objEmpresa->setEnombre($nuevonombre);
+            //entro a una repetitiva y por cada registro de $arregloRegistrosViajes obtengo su IDviaje y actualizo el obj empresa
+            for ($i = 0; $i < count($arregloViajesAsociados); $i++) {
+
+                $idviaje = $arregloViajesAsociados[$i]->getCodigo();
+
+                //listo todos los pasajeros en un array. y actualizo todos los pasajeros con ese IDviaje
+                $arrayPasajeros = $objPasajero->listarReferenciasPorID($idviaje);
+                if (count($arrayPasajeros) > 0) {
+                    //actualizo cada registro del array
+                    for ($j = 0; $j < count($arrayPasajeros); $j++) {
+
+                        $viaje = $arrayPasajeros[$j]->getViaje();
+                        $viaje->setEmpresa($objEmpresa);
+
+                        $arrayPasajeros[$j]->setViaje($viaje);
+
+                        $arrayPasajeros[$j]->modificar();
+                    }
+                    //ahora puedo actualizar el viaje
+                    $arregloViajesAsociados[$i]->setEmpresa($objEmpresa);
+                    $arregloViajesAsociados[$i]->modificar();
+                } else {
+                    $arregloViajesAsociados[$i]->setEmpresa($objEmpresa);
+                    $arregloViajesAsociados[$i]->modificar();
+                }
+            }
+
+            $respuesta = $objEmpresa->modificar();
+
+            if ($respuesta == true) {
+
+                echo " \n -.-.Los datos fueron actualizados correctamente.-.-";
+            } else {
+                echo $objEmpresa->getmensajeoperacion();
             }
         }
     }
-
-    }
-
-    return $arrayPasajeros;
 }
  */

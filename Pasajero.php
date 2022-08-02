@@ -100,7 +100,7 @@ public function __toString(){
 		$resp= false;
          /**pdocumento, pnombre, papellido, ptelefono, idviaje */
 		$consultaInsertar="INSERT INTO pasajero(pdocumento, pnombre, papellido, ptelefono, idviaje ) 
-				VALUES ('".$this->getNroDni()."','".$this->getNombre()."','".$this->getApellido()."','".$this->getTelefono()."','".$this->getViaje()->getCodigo()."')";
+				VALUES ('".$this->getNroDni()."','".$this->getNombre()."','".$this->getApellido()."','".$this->getTelefono()."', '".$this->getViaje()->getCodigo()."')";
 	
 		if($base->Iniciar()){
 
@@ -222,7 +222,7 @@ public function __toString(){
 
 					$pasajero=new Pasajero();
 					$pasajero->buscar($registro['pdocumento']);
-
+					
 					array_push($arregloPasajero,$pasajero);              
 				}
 			

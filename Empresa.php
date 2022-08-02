@@ -71,8 +71,8 @@ public function __toString(){
 		$base=new BaseDatos();
 		$resp= false;
          /**idEmpresa, enombre, edireccion */
-		$consultaInsertar="INSERT INTO empresa(idempresa, enombre, edireccion) 
-				VALUES ('".$this->getIdEmpresa()."','".$this->getEnombre()."','".$this->getEdireccion()."')";
+		$consultaInsertar="INSERT INTO empresa(enombre, edireccion) 
+				VALUES ('".$this->getEnombre()."','".$this->getEdireccion()."')";
 	
 		if($base->Iniciar()){
 
@@ -97,8 +97,8 @@ public function __toString(){
 	    $resp =false; 
 	    $base=new BaseDatos();
         /**idEmpresa, enombre, edireccion */
-		$consultaModifica="UPDATE empresa SET idEmpresa='".$this->getIdEmpresa()."', enombre='".$this->getEnombre().
-                            "',edireccion='".$this->getEdireccion();
+		$consultaModifica="UPDATE empresa SET enombre='".$this->getEnombre().
+                            "',edireccion='".$this->getEdireccion()."' WHERE idEmpresa=".$this->getIdEmpresa();
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){
 			    $resp=  true;

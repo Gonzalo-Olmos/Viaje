@@ -111,8 +111,7 @@ public function __toString(){
 	    $resp =false; 
 	    $base=new BaseDatos();
         /**rnumeroempleado, rnumerolicencia, rnombre, rapellido */
-		$consultaModifica="UPDATE responsable SET rnumeroempleado='".$this->getNroEmpleado()."', rnumerolicencia='".$this->getNroLicencia().
-                            "',rnombre='".$this->getNombre()."', rapellido='".$this->getApellido();
+		$consultaModifica="UPDATE responsable SET rnumerolicencia='".$this->getNroLicencia()."', rnombre='".$this->getNombre()."', rapellido='".$this->getApellido()."' WHERE rnumeroempleado='".$this->getNroEmpleado()."' ";
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){
 			    $resp=  true;

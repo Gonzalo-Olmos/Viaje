@@ -156,8 +156,14 @@ public function cargarPasajeros($cant)
     $objPasajero = new Pasajero();
 
     $arregloPasajerosPorID = $objPasajero->listarReferenciasPorID($this->getCodigo());
-    $cantPasajerosPorId = count($arregloPasajerosPorID);
-   
+
+    if ($arregloPasajerosPorID != null) {
+        $cantPasajerosPorId = count($arregloPasajerosPorID);
+    }else {
+        $cantPasajerosPorId = 0;
+    }
+
+    
 
     if ($cantPasajerosPorId  >= $cant) {
         
@@ -195,6 +201,7 @@ public function cargarPasajeros($cant)
         echo ("\n");
 
         $objPasajero->cargar($doc, $nombre, $apellido, $telefono, $this);
+        
 
         // Inserto el OBj Pasajero en la base de datos
         $respuesta = $objPasajero->insertar();
@@ -231,15 +238,16 @@ public function cargarPasajeros($cant)
     //toString
     public function __toString()
     {
-        return "\n Codigo: " . $this->getCodigo() .
+        return "\n ID Viaje: " . $this->getCodigo() .
             "\n Destino: " . $this->getDestino() .
-            "\n Empresa: " . $this->getEmpresa() .
-            "\n cantMaxPasajeros: " . $this->getCantMaxPasajeros() .
-            "\n Responsable Del Viaje: " . $this->getResponsableViaje() .
-            "\n Importe:\n" . $this->getImporte().
-            "\n tipo Asiento:\n" . $this->getTipoAsiento().
-            "\n idaYvuelta:\n" . $this->getIdaYvuelta().
-            "\n Pasajeros:\n" . $this->mostrar_coleccion_pasajero();
+            "\n Cantidad Maxima de Pasajeros: " . $this->getCantMaxPasajeros() .
+            "\n Importe: " . $this->getImporte().
+            "\n tipo Asiento: " . $this->getTipoAsiento().
+            "\n idaYvuelta: " . $this->getIdaYvuelta()."\n".
+            "\n -Empresa- :\n ". $this->getEmpresa() ."\n".
+            "\n -Responsable Del Viaje- : " . $this->getResponsableViaje();
+
+          /*   "\n Pasajeros:\n" . $this->mostrar_coleccion_pasajero(); */
     }
 
 
