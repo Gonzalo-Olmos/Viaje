@@ -82,11 +82,14 @@ public function setViaje($objViaje){
     $this->objViaje = $objViaje;
 }
 
+
+
 //metodo Tostring
 public function __toString(){
-    return "  ". $this->getNombre()." ".$this->getApellido()."\n".
+    return " ". $this->getNombre()." ".$this->getApellido()."\n".
             "  Nro Dni: ".$this->getNroDni()."\n".
-            "  Telefono: ".$this->getTelefono()."\n";
+            "  Telefono: ".$this->getTelefono()."\n".
+			"  idViaje: ".$this->getViaje()->getCodigo()."\n";
 }
 
 
@@ -102,7 +105,7 @@ public function __toString(){
 		if($base->Iniciar()){
 
 			if($base->Ejecutar($consultaInsertar)){
-
+				
 			    $resp=  true;
 
 			}	else {
@@ -122,10 +125,18 @@ public function __toString(){
 	    $resp =false; 
 	    $base=new BaseDatos();
         /**pdocumento, pnombre, papellido, ptelefono, idviaje */
-		$consultaModifica="UPDATE pasajero SET pdocumento='".$this->getNroDni()."', pnombre='".$this->getNombre().
-                            "',papellido='".$this->getApellido()."', ptelefono='".$this->getTelefono()."', idviaje='".$this->getViaje()->getCodigo();
+		$pdocumento = $this->getNroDni();
+		$pnombre = $this->getNombre();
+		$papellido = $this->getApellido();
+		$ptelefono = $this->getTelefono();
+		$idviaje = $this->getViaje()->getCodigo();
+
+		$consultaModifica="UPDATE pasajero SET papellido='".$papellido."',pnombre='".$pnombre."'
+		,ptelefono=".$ptelefono.", idviaje=".$idviaje." WHERE pdocumento=".$pdocumento; 
+		
 		if($base->Iniciar()){
 			if($base->Ejecutar($consultaModifica)){
+
 			    $resp=  true;
 			}else{
 				$this->setmensajeoperacion($base->getError());
@@ -178,7 +189,7 @@ public function __toString(){
 					$this->setTelefono($registro['ptelefono']);
 					$objViaje = new Viaje();
 					$objViaje->buscar($registro['idviaje']);
-					
+					$this->setViaje($objViaje);
 				
 					$resp= true;
 				}				
@@ -226,6 +237,40 @@ public function __toString(){
 		 return $arregloPasajero;
 	}	
 
+
+/**
+ * Esta funcion retorna un arreglo con los registros relacionados con la el id dado
+ * @param int id
+ * @return Array de registros vinculados con el id 
+ */
+	public function listarReferenciasPorID($id){
+	    $arregloPasajero = null;
+		$base=new BaseDatos();
+		$consultaPasajero="Select * from pasajero where idviaje = ".$id;
+	
+		/* echo $consultaPasajero; */
+		if($base->Iniciar()){
+			if($base->Ejecutar($consultaPasajero)){				
+				$arregloPasajero= array();
+				while($registro=$base->Registro()){
+					 /**pdocumento, pnombre, papellido, ptelefono, idviaje  */		
+
+					$pasajero=new Pasajero();
+					$pasajero->buscar($registro['pdocumento']);
+
+					array_push($arregloPasajero,$pasajero);              
+				}
+			
+		 	}	else {
+		 			$this->setmensajeoperacion($base->getError());
+		 		
+			}
+		 }	else {
+		 		$this->setmensajeoperacion($base->getError());
+		 	
+		 }	
+		 return $arregloPasajero;
+	}	
 
 
 }

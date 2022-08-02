@@ -31,7 +31,7 @@ class Viaje
     }
 
     //Funcion Cargar
-    public function cargar($idviaje, $destino, $objEmpresa, $cantMaxPasajeros,  $objResponsableViaje, $importe, $tipoAsiento, $idaYvuelta, $coleccion_pasajeros){
+    public function cargar($idviaje, $destino, $objEmpresa, $cantMaxPasajeros,  $objResponsableViaje, $importe, $tipoAsiento, $idaYvuelta){
         
         $this->setCodigo($idviaje);
         $this->setDestino($destino);
@@ -41,7 +41,6 @@ class Viaje
         $this->setImporte($importe);
         $this->setTipoAsiento($tipoAsiento);
         $this->setIdaYvuelta($idaYvuelta); 
-        $this->setColeccion_pasajeros($coleccion_pasajeros); 
     }
 
 
@@ -141,6 +140,92 @@ class Viaje
 	public function setmensajeoperacion($mensajeoperacion){
 		$this->mensajeoperacion=$mensajeoperacion;
 	}
+
+
+    
+/**
+ * Esta funcion carga una cantidad de pasajeros a la base de datos
+ * @param int $cant cantidad maxima de pasajeros
+ * @param Viaje $unviaje
+ * 
+ */
+public function cargarPasajeros($cant)
+{
+    $i = 0;
+    $seguir = true;
+    $objPasajero = new Pasajero();
+
+    $arregloPasajerosPorID = $objPasajero->listarReferenciasPorID($this->getCodigo());
+    $cantPasajerosPorId = count($arregloPasajerosPorID);
+   
+
+    if ($cantPasajerosPorId  >= $cant) {
+        
+        echo("ERROR-> No hay asientos disponibles---La cantidad maxima de pasajeros es: ".$cant." y hay cargados: ".$cantPasajerosPorId ." pasajeros");
+    }else{
+
+        
+    echo ("\nCarga de Pasajeros: \n");
+
+    while ($cantPasajerosPorId < $cant && $seguir) {
+
+        //verifico que no esté cargado el mismo pasajero
+        do {
+            $repite = false;
+            echo ("Ingrese el Nro Documento: ");
+            $doc = trim(fgets(STDIN));
+            echo ("\n");
+
+            $encontro = $objPasajero->buscar($doc);
+
+            if ($encontro) {
+                echo ("ERROR-> este pasajero ya se encuentra cargado \n");
+                $repite = true;
+            }
+        } while ($repite);
+
+        echo ("Ingrese el Nombre: ");
+        $nombre = trim(fgets(STDIN));
+        echo ("\n");
+        echo ("Ingrese el apellido: ");
+        $apellido = trim(fgets(STDIN));
+        echo ("\n");
+        echo ("Ingrese el telefono: ");
+        $telefono = trim(fgets(STDIN));
+        echo ("\n");
+
+        $objPasajero->cargar($doc, $nombre, $apellido, $telefono, $this);
+
+        // Inserto el OBj Pasajero en la base de datos
+        $respuesta = $objPasajero->insertar();
+        if ($respuesta == true) {
+            echo "\n/\/\/El Pasajero fue ingresado Con Exito\/\/\ \n";
+
+            //actualizo la cantidad de pasajeros cargados 
+            $arregloPasajerosPorID = $objPasajero->listarReferenciasPorID($this->getCodigo());
+            $cantPasajerosPorId = count($arregloPasajerosPorID);
+
+          /*   array_push($arrayPasajeros, $objPasajero); */
+      /*       $this->setColeccion_pasajeros($arrayPasajeros); */
+
+        } else {
+            echo $objPasajero->getmensajeoperacion();
+        }
+        $i++;
+
+        if ($cantPasajerosPorId < $cant) {
+            echo ("¿Desea agregar el proximo pasajero? \n 1-Si \n 2-No \n");
+            $opcion = trim(fgets(STDIN));
+            if ($opcion == 2) {
+                $seguir = false;
+            }
+        }
+    }
+
+    }
+
+}
+
 
 
     //toString
@@ -377,7 +462,7 @@ class Viaje
     
 
     /**LISTAR */
-    public function listar($condicion=""){
+    public function listar($condicion){
 	    $arregloViaje = null;
 		$base=new BaseDatos();
 		$consultaViaje="Select * from viaje ";
@@ -390,25 +475,6 @@ class Viaje
 			if($base->Ejecutar($consultaViaje)){				
 				$arregloViaje= array();
 				while($registro=$base->Registro()){
-					
-/* 					$codigo= $registro['idviaje'];
-					$destino= $registro['vdestino'];
-					$cantMaxPasajeros= $registro['vcantmaxpasajeros'];
-					$idEmpresa= $registro['idempresa'];
-                    $nroEmpleadoResp = $registro['rnumeroempleado'];
-                    $importe=  $registro['vimporte'];
-                    $tipoAsiento=  $registro['tipoAsiento'];
-                    $idaYvuelta=  $registro['idayvuelta'];
-                
-                    $objEmpresa= new Empresa();
-                    $objEmpresa->buscar($idEmpresa);
-
-                    $objResponsableViaje= new ResponsableV();
-                    $objResponsableViaje->buscar($nroEmpleadoResp);
-
-					$viaje=new Viaje();
-					$viaje->cargar($codigo, $destino, $objEmpresa, $cantMaxPasajeros, $objResponsableViaje, $importe, $tipoAsiento, $idaYvuelta);
- */
                   
                     $viaje=new Viaje();
                     $viaje->buscar( $registro['idviaje']);

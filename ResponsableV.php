@@ -85,8 +85,8 @@ public function __toString(){
 		$base=new BaseDatos();
 		$resp= false;
          /**rnumeroempleado, rnumerolicencia, rnombre, rapellido */
-		$consultaInsertar="INSERT INTO responsable(rnumeroempleado, rnumerolicencia, rnombre, rapellido) 
-				VALUES ('".$this->getNroEmpleado()."','".$this->getNroLicencia()."','".$this->getNombre()."','".$this->getApellido()."')";
+		$consultaInsertar="INSERT INTO responsable(rnumerolicencia, rnombre, rapellido) 
+				VALUES ('".$this->getNroLicencia()."','".$this->getNombre()."','".$this->getApellido()."')";
 	
 		if($base->Iniciar()){
 
